@@ -69,6 +69,12 @@ TEMPLATES = [
     },
 ]
 
+#Direccion y redireccion del login/logout
+
+LOGIN_REDIRECT_URL = 'blogapp:blog_list'
+LOGOUT_REDIRECT_URL = 'blogapp:blog_list'
+LOGIN_URL = 'blogapp:login'
+
 WSGI_APPLICATION = 'blogproject.wsgi.application'
 
 
