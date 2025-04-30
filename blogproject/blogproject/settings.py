@@ -31,13 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'blogapp',
+    'django.contrib.admin', #Da una interfaz admin para administrar nuestra data
+    'django.contrib.auth', #Para autentificar usuarios
+    'django.contrib.contenttypes', #
+    'django.contrib.sessions', #Esto ya casi no se usa, se puede borrar
+    'django.contrib.messages', #Para mostrar "notifaciones de una sola vez" para el usuario
+    'django.contrib.staticfiles', #Para mostrar servingstaticfiles como imágenes, archivo CSS...
+    'blogapp', #Esta es una nueva app, que se creo a partir de la carpeta llamada "blogapp"
     'widget_tweaks',
 ]
 
