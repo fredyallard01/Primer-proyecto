@@ -1,7 +1,10 @@
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from .models import Blog, Review, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
 
 class BlogListView(ListView):
     model = Blog
@@ -27,7 +30,7 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 
 
 
-class ReviewCreateView(CreateView):
+class ReviewCreateView(LoginRequiredMixin,CreateView):
     model = Review
     fields = ['rating', 'comment']
     template_name = 'blogapp/review_form.html'
@@ -41,7 +44,7 @@ class ReviewCreateView(CreateView):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['pk']})
 
 
-class CommentCreateView(CreateView):
+class CommentCreateView(LoginRequiredMixin,CreateView):
     model = Comment
     fields = ['content']
     template_name = 'blogapp/comment_form.html'
@@ -53,3 +56,19 @@ class CommentCreateView(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['blog_pk']})
+
+
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'blogapp/register.html'
+    success_url = '/login'
+    
+
+class ProfileEditView(LoginRequiredMixin,UpdateView):
+    model = User
+    fields = ['username','first_name','last_name','email']
+    template_name = 'blogapp/edit_profile.html'
+    success_url = '/profile/edit'
+    
+    def get_object(self):
+        return self.request.user
