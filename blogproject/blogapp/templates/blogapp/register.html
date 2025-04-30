@@ -1,0 +1,9 @@
+<h2>Registro</h2>
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Registrarse</button>
+</form>
+{% if form.non_field.errors%}
+    <br><span>{{form.non_field_errors.0}}</span>
+{% endif%}
