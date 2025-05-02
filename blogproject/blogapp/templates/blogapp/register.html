@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup Form</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+
+  <script>
+    document.documentElement.classList.add('dark');
+  </script>
+</head>
+<body class="bg-black text-white flex items-center justify-center min-h-screen p-4">
+  <div class="w-full max-w-md rounded-2xl p-6 md:p-8 dark:bg-black shadow-lg">
+    <h2 class="text-xl font-bold text-white text-center">Bienvenido a GamesHub 🕹️</h2>
+    <p class="mt-2 text-sm text-neutral-400 text-center">
+      Regístrate para acceder al mejor portal sobre el mundo de los videojuegos.
+    </p>
+
+    <div class="my-6 h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent"></div>
+
+    <form onsubmit="handleSubmit(event)">
+      <div class="mb-4 flex flex-col gap-2 md:flex-row md:gap-4">
+        <input type="text" placeholder="Nombre" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+        <input type="text" placeholder="Apellido" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+      </div>
+
+      <input type="email" placeholder="Correo electrónico" class="w-full mb-4 rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+      <input type="password" placeholder="••••••••" class="w-full mb-4 rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+      <input type="password" placeholder="••••••••" class="w-full mb-6 rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+
+      <button type="submit" class="group relative block w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium shadow-[inset_0_1px_0_#ffffff40,inset_0_-1px_0_#ffffff40]">
+        Regístrate →
+        <span class="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition group-hover:opacity-100"></span>
+        <span class="absolute inset-x-10 -bottom-px mx-auto h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition group-hover:opacity-100"></span>
+      </button>
+
+      <div class="my-6 h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent"></div>
+
+      <!-- Botones sociales -->
+      <div class="flex flex-col gap-4">
+        <!-- GitHub -->
+        <button type="button" class="group relative flex items-center justify-center gap-3 h-10 w-full rounded-md bg-zinc-900 text-white font-medium shadow-[inset_0_1px_0_#ffffff40,inset_0_-1px_0_#ffffff40] hover:bg-zinc-800 transition">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub Logo" class="h-5 w-5"/>
+          GitHub
+        </button>
+
+        <!-- Google -->
+        <button type="button" class="group relative flex items-center justify-center gap-3 h-10 w-full rounded-md bg-zinc-900 text-white font-medium shadow-[inset_0_1px_0_#ffffff40,inset_0_-1px_0_#ffffff40] hover:bg-zinc-800 transition">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="h-5 w-5"/>
+          Google
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      console.log("Formulario enviado");
+    }
+  </script>
+</body>
+</html>
