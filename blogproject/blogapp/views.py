@@ -1,9 +1,12 @@
+from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from .models import Blog, Review, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from .forms import RegisterForm
+from django.contrib import messages
+
 
 
 class BlogListView(ListView):
@@ -30,10 +33,24 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 
 
 
-class ReviewCreateView(LoginRequiredMixin,CreateView):
+class ReviewCreateView(LoginRequiredMixin, CreateView):
     model = Review
     fields = ['rating', 'comment']
     template_name = 'blogapp/review_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        blog_id = self.kwargs['pk']
+        user = request.user
+
+        if Review.objects.filter(blog_id=blog_id, reviewer=user).exists():
+            messages.error(request, "Ya has escrito una reseña para este blog.")
+            return redirect('blogapp:blog_detail', pk=blog_id)
+
+        return super().dispatch(request, *args, **kwargs)
+
 
     def form_valid(self, form):
         form.instance.reviewer = self.request.user
@@ -59,16 +76,19 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
 
 
 class RegisterView(CreateView):
-    form_class = UserCreationForm
+    form_class = RegisterForm
     template_name = 'blogapp/register.html'
-    success_url = '/login'
-    
+    success_url = reverse_lazy('blogapp/login')
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
 
 class ProfileEditView(LoginRequiredMixin,UpdateView):
     model = User
     fields = ['username','first_name','last_name','email']
     template_name = 'blogapp/edit_profile.html'
     success_url = '/profile/edit'
-    
+
     def get_object(self):
         return self.request.user
