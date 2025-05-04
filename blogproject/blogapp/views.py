@@ -1,27 +1,27 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect #Redirige a una URL especifica
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from .models import Blog, Review, Comment
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin #Restringe el acceso a usuarios autenticados
 from django.contrib.auth.models import User
 from .forms import RegisterForm
 from django.contrib import messages
 
 
 
-class BlogListView(ListView):
-    model = Blog
-    template_name = 'blogapp/blog_list.html'
+class BlogListView(ListView): #Muestra una lista de blogs
+    model = Blog #Modelo asociado
+    template_name = 'blogapp/blog_list.html' #Se especifica la plantilla HTML guardada en (blogapp/blog_list.html)
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(DetailView): #Muestra los detalles de un blog específico
     model = Blog
     template_name = 'blogapp/blog_detail.html'
 
 
-class BlogCreateView(LoginRequiredMixin, CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView): #Permite a un usuario autenticado crear un nuevo blog
     model = Blog
-    fields = ['title', 'content']
+    fields = ['title', 'content'] #Campos del formulario (title, content)
     template_name = 'blog_form.html'
 
     def form_valid(self, form):
@@ -33,12 +33,12 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 
 
 
-class ReviewCreateView(LoginRequiredMixin, CreateView):
+class ReviewCreateView(LoginRequiredMixin, CreateView): #Permite a un usuario autenticado crear una reseña para un blog
     model = Review
     fields = ['rating', 'comment']
     template_name = 'blogapp/review_form.html'
 
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs): #Verifica si el usuario ya ha escrito una reseña para el blog. Si es así, muestra un mensaje de error y redirige al detalle del blog
         if not request.user.is_authenticated:
             return self.handle_no_permission()
 
@@ -52,16 +52,16 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-    def form_valid(self, form):
+    def form_valid(self, form): #Asigna el usuario autenticado como autor del comentario y lo enlaza a la reseña correspondiente
         form.instance.reviewer = self.request.user
         form.instance.blog_id = self.kwargs['pk']
         return super().form_valid(form)
 
-    def get_success_url(self):
+    def get_success_url(self): #Redirige al detalle del blog tras crear el comentario
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['pk']})
 
 
-class CommentCreateView(LoginRequiredMixin,CreateView):
+class CommentCreateView(LoginRequiredMixin,CreateView): #Permite a un usuario autenticado agregar un comentario a una reseña
     model = Comment
     fields = ['content']
     template_name = 'blogapp/comment_form.html'
@@ -75,7 +75,7 @@ class CommentCreateView(LoginRequiredMixin,CreateView):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['blog_pk']})
 
 
-class RegisterView(CreateView):
+class RegisterView(CreateView): #Permite a un usuario registrarse en la aplicación
     form_class = RegisterForm
     template_name = 'blogapp/register.html'
     success_url = reverse_lazy('blogapp/login')
@@ -84,11 +84,11 @@ class RegisterView(CreateView):
         print(form.errors)
         return super().form_invalid(form)
 
-class ProfileEditView(LoginRequiredMixin,UpdateView):
+class ProfileEditView(LoginRequiredMixin,UpdateView): #Permite a un usuario autenticado editar su perfil
     model = User
     fields = ['username','first_name','last_name','email']
     template_name = 'blogapp/edit_profile.html'
     success_url = '/profile/edit'
 
-    def get_object(self):
+    def get_object(self): #Devuelve el usuario autenticado actual para editar su perfil
         return self.request.user
