@@ -22,10 +22,13 @@
     <script>
       const ratingInput = document.getElementById('rating-input');
       ratingInput.addEventListener('input', () => {
-        const val = parseInt(ratingInput.value);
-        if (val > 5) ratingInput.value = 5;
-        if (val < 1) ratingInput.value = 1;
+        let val = parseFloat(ratingInput.value);
+        val = Math.round(val);
+        
+        if (val > 5) val = 5;
+        if (val < 1) val = 1;
+        ratingInput.value = val;
       });
-    </script>    
+    </script>
   </form>
 {% endblock %}

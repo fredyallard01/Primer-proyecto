@@ -6,18 +6,27 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from .forms import RegisterForm
 from django.contrib import messages
+from django.db.models import Avg
 
 
 
 class BlogListView(ListView):
     model = Blog
     template_name = 'blogapp/blog_list.html'
-
+    
+    def get_queryset(self):
+        return Blog.objects.all().annotate(average_rating=Avg('reviews__rating'))
 
 class BlogDetailView(DetailView):
     model = Blog
     template_name = 'blogapp/blog_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        blog = self.object
+        average_rating = blog.reviews.aggregate(Avg('rating'))['rating__avg']
+        context['average_rating'] = average_rating
+        return context
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
     model = Blog
