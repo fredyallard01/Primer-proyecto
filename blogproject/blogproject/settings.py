@@ -31,13 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'blogapp',
+    'django.contrib.admin', #Da una interfaz admin para administrar nuestra data
+    'django.contrib.auth', #Para autentificar usuarios
+    'django.contrib.contenttypes', #
+    'django.contrib.sessions', #Esto ya casi no se usa, se puede borrar
+    'django.contrib.messages', #Para mostrar "notifaciones de una sola vez" para el usuario
+    'django.contrib.staticfiles', #Para mostrar servingstaticfiles como imágenes, archivo CSS...
+    'blogapp', #Esta es una nueva app, que se creo a partir de la carpeta llamada "blogapp"
     'widget_tweaks',
 ]
 
@@ -68,6 +68,12 @@ TEMPLATES = [
         },
     },
 ]
+
+#Direccion y redireccion del login/logout
+
+LOGIN_REDIRECT_URL = 'blogapp:blog_list'
+LOGOUT_REDIRECT_URL = 'blogapp:blog_list'
+LOGIN_URL = 'blogapp:login'
 
 WSGI_APPLICATION = 'blogproject.wsgi.application'
 
@@ -105,11 +111,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 

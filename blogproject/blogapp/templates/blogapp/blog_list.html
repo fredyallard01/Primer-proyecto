@@ -6,6 +6,25 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
         <h2 class="text-xl font-semibold mb-2">
           <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
+
+          <p class="text-yellow-400 text-lg leading-none">
+            {% if blog.average_rating %}
+            {% for i in "12345" %}
+              {% if forloop.counter <= blog.average_rating %}
+                ★
+              {% else %}
+                ☆
+              {% endif %}
+            {% endfor %}
+            <span class="ml-2 text-gray-600 dark:text-gray-400">
+              {{ blog.average_rating|floatformat:1 }}/5
+            </span>
+            {% else %}
+            <span class="text-gray-600 dark:text-gray-400">
+              No tiene calificaciones aún
+            </span>
+            {% endif %}
+          </p>
         </h2>
         <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }}</p>
       </div>
