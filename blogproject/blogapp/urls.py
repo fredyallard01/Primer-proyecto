@@ -1,3 +1,4 @@
+#Aquí se guardan las URLs que componen el sitio web
 from django.urls import path
 from .views import BlogListView, BlogDetailView, ReviewCreateView, CommentCreateView, BlogCreateView
 from django.contrib.auth import views as auth_views
