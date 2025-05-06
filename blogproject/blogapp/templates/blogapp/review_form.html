@@ -3,20 +3,9 @@
 {% block content %}
   <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Write a Review</h1>
   <form method="post" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">{% csrf_token %}
+    <label for="editor" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Comment</label>
     <div class="space-y-2 transition-all duration-700 ease-in-out">
-      {% for field in form %}
-        <div>
-          <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">{{ field.label }}</label>
-          {% if field.name == 'rating' %}
-            {{ field|add_class:"bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"|attr:"type=number"|attr:"max=5"|attr:"min=1"|attr:"step=1"|attr:"id=rating-input" }}
-          {% else %}
-            {{ field|add_class:"bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" }}
-          {% endif %}
-          {% if field.errors %}
-            <p class="text-red-500 text-sm">{{ field.errors|striptags }}</p>
-          {% endif %}
-        </div>
-      {% endfor %}
+      <textarea id="editor" name="content" class="w-full h-64 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>    
     </div>
     <button type="submit" class="px-6 py-2 bg-green-500 hover:bg-green-600 text-white dark:bg-green-600 dark:hover:bg-green-700 rounded transition-all duration-500 ease-in-out">Submit Review</button>
     <script>
@@ -31,4 +20,12 @@
       });
     </script>
   </form>
+
+  <script>
+    ClassicEditor
+      .create(document.querySelector('#editor'))
+      .catch(error => {
+        console.error('Error initializing CKEditor:', error);
+      });
+  </script>
 {% endblock %}
