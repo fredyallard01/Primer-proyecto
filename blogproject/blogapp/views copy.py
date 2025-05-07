@@ -8,11 +8,6 @@ from .forms import RegisterForm
 from django.contrib import messages
 from django.db.models import Avg
 
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-
 
 
 class BlogListView(ListView): #Muestra una lista de blogs
@@ -109,11 +104,3 @@ class ProfileEditView(LoginRequiredMixin,UpdateView): #Permite a un usuario aute
         return self.request.user
     
 
-@csrf_exempt  # Puedes quitar esto si usas correctamente el CSRF token
-def upload_image(request):
-    if request.method == 'POST' and request.FILES.get('upload'):
-        image = request.FILES['upload']
-        path = default_storage.save(f'uploads/{image.name}', ContentFile(image.read()))
-        image_url = default_storage.url(path)
-        return JsonResponse({'url': image_url})
-    return JsonResponse({'error': 'Upload failed'}, status=400)

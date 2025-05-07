@@ -2,7 +2,8 @@
 {% load widget_tweaks %}
 {% block content %}
   <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Write a Review</h1>
-  <form method="post" enctype="multipart/form-data" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">{% csrf_token %}
+  <form method="post" enctype="multipart/form-data" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">
+    {% csrf_token %}
 
     <label for="rating-input" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Rating</label>
     <input type="number" id="rating-input" name="rating" min="1" max="5" value="1" class="w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -15,9 +16,62 @@
     <button type="submit" class="px-6 py-2 bg-green-500 hover:bg-green-600 text-white dark:bg-green-600 dark:hover:bg-green-700 rounded transition-all duration-500 ease-in-out">Submit Review</button>
 
     <script>
+      // Función para obtener el token CSRF desde la cookie
+      function getCSRFToken() {
+        const name = 'csrftoken';
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const c = cookies[i].trim();
+          if (c.startsWith(name + '=')) {
+            return decodeURIComponent(c.substring(name.length + 1));
+          }
+        }
+        return '';
+      }
+
+      class MyUploadAdapter {
+        constructor(loader) {
+          this.loader = loader;
+        }
+
+        upload() {
+          return this.loader.file.then(file => {
+            const data = new FormData();
+            data.append('upload', file);
+
+            return fetch('/upload/', {
+              method: 'POST',
+              headers: {
+                'X-CSRFToken': getCSRFToken()
+              },
+              body: data
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Upload failed');
+              }
+              return response.json();
+            })
+            .then(data => {
+              return {
+                default: data.url // la URL pública de la imagen subida
+              };
+            });
+          });
+        }
+
+        abort() {}
+      }
+
+      function MyCustomUploadAdapterPlugin(editor) {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+          return new MyUploadAdapter(loader);
+        };
+      }
+
       ClassicEditor
         .create(document.querySelector('#editor'), {
-          extraPlugins: [CustomUploadAdapterPlugin]
+          extraPlugins: [MyCustomUploadAdapterPlugin]
         })
         .then(editor => {
           editor.editing.view.change(writer => writer.setStyle('min-height', '90vh', editor.editing.view.document.getRoot()));
@@ -26,10 +80,11 @@
           const isDark = document.documentElement.classList.contains('dark');
           if (isDark) {
             editor.editing.view.change(writer => {
-              writer.setStyle('background-color', '#374151', editor.editing.view.document.getRoot()); // gray-700
-              writer.setStyle('color', '#D1D5DB', editor.editing.view.document.getRoot()); // gray-300
+              writer.setStyle('background-color', '#374151', editor.editing.view.document.getRoot());
+              writer.setStyle('color', '#D1D5DB', editor.editing.view.document.getRoot());
             });
           }
+
           editableElement.classList.add(
             'bg-white', 'dark:bg-gray-700',
             'text-gray-900', 'dark:text-gray-300',
@@ -42,41 +97,6 @@
         .catch(error => {
           console.error('Error initializing CKEditor:', error);
         });
-
-      function CustomUploadAdapterPlugin(editor) {
-        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-          return new UploadAdapter(loader);
-        };
-      }
-
-      class UploadAdapter {
-        constructor(loader) {
-          this.loader = loader;
-        }
-
-        upload() {
-          return this.loader.file.then(file => {
-            const data = new FormData();
-            data.append('upload', file);
-
-            return fetch('/upload/', {
-              method: 'POST',
-              body: data,
-              headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-              }
-            })
-              .then(response => response.json())
-              .then(data => {
-                return {
-                  default: data.url  // tu backend debe devolver JSON con la URL
-                };
-              });
-          });
-        }
-
-        abort() {}
-      }
     </script>
 
     <script>
@@ -90,6 +110,5 @@
         ratingInput.value = val;
       });
     </script>
-
   </form>
 {% endblock %}
