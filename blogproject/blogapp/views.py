@@ -6,14 +6,35 @@ from django.contrib.auth.mixins import LoginRequiredMixin #Restringe el acceso a
 from django.contrib.auth.models import User
 from .forms import RegisterForm
 from django.contrib import messages
-from django.db.models import Avg
+from django.db.models import Avg, Count
 
+class BlogListView(ListView):
+    model = Blog
+    template_name = 'blogapp/blog_list.html'
 
+    def get_queryset(self):
+        genre = self.request.GET.get('genre')
 
-class BlogListView(ListView): #Muestra una lista de blogs
-    model = Blog #Modelo asociado
-    template_name = 'blogapp/blog_list.html' #Se especifica la plantilla HTML guardada en (blogapp/blog_list.html)
+        if genre:
+            return Blog.objects.filter(genre=genre).annotate(average_rating=Avg('reviews__rating'))
+        
+        return Blog.objects.all().annotate(average_rating=Avg('reviews__rating'))
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['genres'] = Blog.GAMES_GENRES
+
+        context['top_rated_blogs'] = Blog.objects.annotate(
+            average_rating=Avg('reviews__rating')
+        ).order_by('-average_rating')[:5]
+
+        context['most_commented_blogs'] = Blog.objects.annotate(
+            comment_count=Count('reviews__comments'),
+            average_rating=Avg('reviews__rating')
+        ).order_by('-comment_count')[:5]
+
+        return context
 
 class BlogDetailView(DetailView): #Muestra los detalles de un blog específico
     model = Blog
@@ -25,13 +46,12 @@ class BlogDetailView(DetailView): #Muestra los detalles de un blog específico
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         blog = self.object
-        average_rating = blog.reviews.aggregate(Avg('rating'))['rating__avg']
-        context['average_rating'] = average_rating
+        context['average_rating'] = blog.reviews.aggregate(Avg('rating'))['rating__avg']
         return context
 
 class BlogCreateView(LoginRequiredMixin, CreateView): #Permite a un usuario autenticado crear un nuevo blog
     model = Blog
-    fields = ['title', 'content'] #Campos del formulario (title, content)
+    fields = ['genre','title', 'content',] #Campos del formulario (title, content)
     template_name = 'blog_form.html'
 
     def form_valid(self, form):
