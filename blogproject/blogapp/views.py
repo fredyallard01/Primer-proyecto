@@ -1,12 +1,15 @@
-from django.shortcuts import redirect #Redirige a una URL especifica
+from django.shortcuts import redirect, render #Redirige a una URL especifica
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
+from blogapp import models
 from .models import Blog, Review, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin #Restringe el acceso a usuarios autenticados
 from django.contrib.auth.models import User
 from .forms import RegisterForm
 from django.contrib import messages
 from django.db.models import Avg, Count
+
 
 class BlogListView(ListView):
     model = Blog
@@ -108,7 +111,7 @@ class CommentCreateView(LoginRequiredMixin,CreateView): #Permite a un usuario au
 class RegisterView(CreateView): #Permite a un usuario registrarse en la aplicación
     form_class = RegisterForm
     template_name = 'blogapp/register.html'
-    success_url = reverse_lazy('blogapp/login')
+    success_url = '/login/'
 
     def form_invalid(self, form):
         print(form.errors)
@@ -122,3 +125,22 @@ class ProfileEditView(LoginRequiredMixin,UpdateView): #Permite a un usuario aute
 
     def get_object(self): #Devuelve el usuario autenticado actual para editar su perfil
         return self.request.user
+    
+class AdminDashboardView(View):
+    def get(self, request):
+        if not request.user.is_staff:
+            return redirect('blogapp:blog_list')
+
+        total_blogs = Blog.objects.count()
+        blogs_by_genre = Blog.objects.values('genre').annotate(count=Count('id'))
+        total_reviews = Review.objects.count()
+        total_comments = Comment.objects.count()
+
+        context = {
+            'total_blogs': total_blogs,
+            'blogs_by_genre': blogs_by_genre,
+            'total_reviews': total_reviews,
+            'total_comments': total_comments
+        }
+
+        return render(request, 'blogapp/admin_dashboard.html', context)
