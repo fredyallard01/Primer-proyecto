@@ -1,18 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>    
-  if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  </script>
-  
-  <script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
-
-
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GamesHub - Blog de Videojuegos</title>
@@ -28,6 +16,9 @@
             'neon-purple': '#b400ff',
             'gamer-dark': '#0a0a12',
             'gamer-light': '#1a1a2e',
+            'light-primary': '#f8fafc',
+            'light-secondary': '#e2e8f0',
+            'light-accent': '#3b82f6'
           },
           fontFamily: {
             'gamer': ['"Press Start 2P"', 'cursive'],
@@ -41,6 +32,10 @@
             glow: {
               'from': { 'text-shadow': '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f0ff, 0 0 20px #00f0ff' },
               'to': { 'text-shadow': '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #b400ff, 0 0 40px #b400ff' }
+            },
+            'glow-light': {
+              'from': { 'text-shadow': '0 0 5px #fff, 0 0 10px #fff, 0 0 15px #3b82f6, 0 0 20px #3b82f6' },
+              'to': { 'text-shadow': '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #6366f1, 0 0 40px #6366f1' }
             }
           }
         }
@@ -52,38 +47,50 @@
   
   <style>
     html {
-      background-color: #0a0a12;
       scroll-behavior: smooth;
     }
-    .dark html {
-      background-color: #0a0a12;
-    }
+    
+    /* Estilos base para ambos modos */
     html, body {
       height: 100%;
       transition: all 0.5s ease-in-out;
     }
+    
+    /* Modo oscuro */
+    .dark {
+      background-color: #0a0a12;
+    }
+    
+    /* Modo claro */
+    .light {
+      background-color: #f8fafc;
+    }
+    
     @keyframes fade-in {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    
     .animate-fade-in {
       animation: fade-in 0.6s ease-out;
       will-change: opacity, transform;
     }
+    
     input:focus, textarea:focus, select:focus {
       outline: none;
-      box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.5);
     }
+    
     .gamer-btn {
       position: relative;
       overflow: hidden;
       transition: all 0.3s;
       z-index: 1;
     }
+    
     .gamer-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 240, 255, 0.4);
     }
+    
     .gamer-btn::before {
       content: '';
       position: absolute;
@@ -91,13 +98,15 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.4), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
       transition: 0.5s;
       z-index: -1;
     }
+    
     .gamer-btn:hover::before {
       left: 100%;
     }
+    
     .pixel-corners {
       clip-path: 
         polygon(
@@ -107,9 +116,8 @@
           5px 100%, 5px calc(100% - 5px), 0% calc(100% - 5px)
         );
     }
-    .scanlines {
-      position: relative;
-    }
+    
+    /* Scanlines - diferente para cada modo */
     .scanlines::after {
       content: "";
       position: absolute;
@@ -117,99 +125,136 @@
       left: 0;
       width: 100%;
       height: 100%;
+      background-size: 100% 4px;
+      pointer-events: none;
+      animation: scanline 8s linear infinite;
+    }
+    
+    .dark .scanlines::after {
       background: linear-gradient(
         to bottom,
         transparent 0%,
         rgba(0, 240, 255, 0.05) 50%,
         transparent 100%
       );
-      background-size: 100% 4px;
-      pointer-events: none;
-      animation: scanline 8s linear infinite;
     }
+    
+    .light .scanlines::after {
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(59, 130, 246, 0.05) 50%,
+        transparent 100%
+      );
+    }
+    
     @keyframes scanline {
       0% { background-position: 0 0; }
       100% { background-position: 0 100%; }
     }
+    
+    /* Grid - diferente para cada modo */
+    .grid-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-size: 30px 30px;
+      z-index: -2;
+    }
+    
+    .dark .grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+    }
+    
+    .light .grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+    }
   </style>
 </head>
-<body id="body" class="flex flex-col min-h-screen bg-gamer-dark text-gray-100 font-orbitron transition-all duration-700 ease-in-out scanlines">
-  <!-- Fondo de pantalla de juego -->
+<body id="body" class="flex flex-col min-h-screen font-orbitron transition-all duration-700 ease-in-out scanlines dark:bg-gamer-dark dark:text-gray-100 light:bg-light-primary light:text-gray-900">
+  <!-- Fondo de pantalla de juego - diferente para cada modo -->
   <div class="fixed inset-0 -z-10 overflow-hidden opacity-70">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=3000&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay"></div>
-    <div class="absolute inset-0 bg-gradient-to-b from-neon-blue/10 via-neon-purple/10 to-neon-pink/10"></div>
-    <div class="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+    <!-- Elimina esta línea -->
+    <!-- <div class="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=3000&auto=format&fit=crop')] light:bg-[url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3000&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay"></div> -->
+    <div class="absolute inset-0 dark:bg-gradient-to-b from-neon-blue/10 via-neon-purple/10 to-neon-pink/10 light:bg-gradient-to-b from-light-accent/10 via-purple-500/10 to-pink-500/10"></div>
+    <div class="grid-pattern"></div>
   </div>
 
-  <!-- Barra de navegación estilo gamer -->
-  <nav class="bg-gamer-dark/80 backdrop-blur-md border-b-2 border-neon-blue/30 py-4 px-6 transition-all shadow-lg shadow-neon-blue/10">
+  <!-- Barra de navegación - estilos para ambos modos -->
+  <nav class="dark:bg-gamer-dark/80 light:bg-white/80 backdrop-blur-md border-b-2 dark:border-neon-blue/30 light:border-light-accent/30 py-4 px-6 transition-all shadow-lg dark:shadow-neon-blue/10 light:shadow-light-accent/10">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <a href="{% url 'blogapp:blog_list' %}" class="text-2xl font-gamer text-neon-blue tracking-wider transition-all hover:text-neon-pink hover:animate-glow">
-        Games<span class="text-neon-pink">Hub</span>
+      <a href="{% url 'blogapp:blog_list' %}" class="text-2xl font-gamer tracking-wider transition-all hover:animate-glow dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600">
+        Games<span class="dark:text-neon-pink light:text-purple-600">Hub</span>
       </a>
       <div class="flex items-center space-x-4">
-        <button onclick="toggleDarkMode()" class="gamer-btn flex items-center gap-2 px-4 py-2 rounded-md bg-gamer-light border border-neon-blue/50 text-neon-blue hover:border-neon-pink hover:text-neon-pink transition-all duration-300 shadow-lg">
+        <button onclick="toggleDarkMode()" class="gamer-btn flex items-center gap-2 px-4 py-2 rounded-md border transition-all duration-300 shadow-lg dark:bg-gamer-light dark:border-neon-blue/50 dark:text-neon-blue dark:hover:border-neon-pink dark:hover:text-neon-pink light:bg-gray-100 light:border-light-accent/50 light:text-light-accent light:hover:border-purple-600 light:hover:text-purple-600">
           <span id="theme-icon" class="transition-all duration-500">🌞</span>
           <span id="theme-label" class="transition-opacity duration-500 ease-in-out">Modo Claro</span>
         </button>
-        <a href="{% url 'blogapp:add_blog' %}" class="gamer-btn bg-gradient-to-r from-neon-blue to-neon-purple text-gamer-dark font-bold py-2 px-4 rounded-md transition-all duration-500 ease-in-out hover:from-neon-pink hover:to-neon-blue">
+        <a href="{% url 'blogapp:add_blog' %}" class="gamer-btn font-bold py-2 px-4 rounded-md transition-all duration-500 ease-in-out dark:bg-gradient-to-r dark:from-neon-blue dark:to-neon-purple dark:text-gamer-dark dark:hover:from-neon-pink dark:hover:to-neon-blue light:bg-gradient-to-r light:from-light-accent light:to-purple-500 light:text-white light:hover:from-purple-600 light:hover:to-light-accent">
           New Post
         </a>
         {% if user.is_authenticated %}
           <div class="flex items-center space-x-4">
-            <span class="text-neon-blue">Player: <span class="text-neon-pink">{{user.username}}</span></span>
-            <a href="{% url 'blogapp:edit_profile' %}" class="text-neon-blue hover:text-neon-pink transition-colors">Editar Perfil</a>
+            <span class="dark:text-neon-blue light:text-light-accent">Player: <span class="dark:text-neon-pink light:text-purple-600">{{user.username}}</span></span>
+            <a href="{% url 'blogapp:edit_profile' %}" class="dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600 transition-colors">Editar Perfil</a>
             <form action="{% url 'blogapp:logout' %}" method="post">
               {% csrf_token %}
-              <button type="submit" class="text-red-400 hover:text-red-300 transition-colors">Logout</button>
+              <button type="submit" class="dark:text-red-400 dark:hover:text-red-300 light:text-red-500 light:hover:text-red-600 transition-colors">Logout</button>
             </form>
           </div>
         {% else %}
           <div class="flex items-center space-x-4">
-            <a href="{% url 'blogapp:login' %}" class="text-neon-blue hover:text-neon-pink transition-colors">Login</a>
-            <a href="{% url 'blogapp:register' %}" class="text-neon-blue hover:text-neon-pink transition-colors">Register</a>
+            <a href="{% url 'blogapp:login' %}" class="dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600 transition-colors">Login</a>
+            <a href="{% url 'blogapp:register' %}" class="dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600 transition-colors">Register</a>
           </div>
         {% endif %}
       </div>
     </div>
   </nav>
 
-  <!-- Contenido principal -->
+  <!-- Contenido principal - estilos para ambos modos -->
   <main class="flex-grow w-full">
     <div class="max-w-4xl mx-auto px-4 py-8">
-      <div class="bg-gamer-light/80 backdrop-blur-sm border-2 border-neon-blue/20 rounded-lg shadow-lg shadow-neon-blue/10 pixel-corners p-6 transition-all duration-700 ease-in-out">
+      <div class="backdrop-blur-sm border-2 rounded-lg shadow-lg pixel-corners p-6 transition-all duration-700 ease-in-out dark:bg-gamer-light/80 dark:border-neon-blue/20 dark:shadow-neon-blue/10 light:bg-white/80 light:border-light-accent/20 light:shadow-light-accent/10">
         {% block content %}
           <!-- Ejemplo de contenido -->
-          <h1 class="text-4xl font-gamer text-neon-blue mb-6 text-center animate-glow">GameVerse</h1>
-          <h2 class="text-2xl font-gamer text-neon-pink mb-4 border-b-2 border-neon-purple/50 pb-2">Latest Reviews</h2>
+          <h1 class="text-4xl font-gamer mb-6 text-center dark:text-neon-blue dark:animate-glow light:text-light-accent light:animate-[glow-light_2s_ease-in-out_infinite_alternate]">GameVerse</h1>
+          <h2 class="text-2xl font-gamer mb-4 border-b-2 pb-2 dark:text-neon-pink dark:border-neon-purple/50 light:text-purple-600 light:border-purple-300/50">Latest Reviews</h2>
           
           <div class="space-y-4">
             <!-- Ejemplo de post 1 -->
-            <div class="p-4 bg-gamer-dark/70 border border-neon-blue/30 rounded-lg transition-all hover:border-neon-pink/50 hover:shadow-neon-pink/10 hover:shadow-md">
-              <h3 class="text-xl font-bold text-neon-blue">Cyberpunk 2077: Phantom Liberty Review</h3>
-              <p class="text-gray-300 mt-2">The long-awaited DLC finally delivers on the original promise...</p>
+            <div class="p-4 border rounded-lg transition-all hover:shadow-md dark:bg-gamer-dark/70 dark:border-neon-blue/30 dark:hover:border-neon-pink/50 dark:hover:shadow-neon-pink/10 light:bg-gray-50/70 light:border-light-accent/30 light:hover:border-purple-400/50 light:hover:shadow-purple-400/10">
+              <h3 class="text-xl font-bold dark:text-neon-blue light:text-light-accent">Cyberpunk 2077: Phantom Liberty Review</h3>
+              <p class="mt-2 dark:text-gray-300 light:text-gray-700">The long-awaited DLC finally delivers on the original promise...</p>
               <div class="flex justify-between items-center mt-3">
-                <span class="text-neon-purple text-sm">by NightHunter</span>
-                <span class="text-gray-400 text-sm">2023-09-26</span>
+                <span class="dark:text-neon-purple light:text-purple-500 text-sm">by NightHunter</span>
+                <span class="dark:text-gray-400 light:text-gray-500 text-sm">2023-09-26</span>
               </div>
             </div>
             
             <!-- Ejemplo de post 2 -->
-            <div class="p-4 bg-gamer-dark/70 border border-neon-blue/30 rounded-lg transition-all hover:border-neon-pink/50 hover:shadow-neon-pink/10 hover:shadow-md">
-              <h3 class="text-xl font-bold text-neon-blue">Starfield: Is It Worth The Hype?</h3>
-              <p class="text-gray-300 mt-2">After 100 hours in Bethesda's space epic, here's our verdict...</p>
+            <div class="p-4 border rounded-lg transition-all hover:shadow-md dark:bg-gamer-dark/70 dark:border-neon-blue/30 dark:hover:border-neon-pink/50 dark:hover:shadow-neon-pink/10 light:bg-gray-50/70 light:border-light-accent/30 light:hover:border-purple-400/50 light:hover:shadow-purple-400/10">
+              <h3 class="text-xl font-bold dark:text-neon-blue light:text-light-accent">Starfield: Is It Worth The Hype?</h3>
+              <p class="mt-2 dark:text-gray-300 light:text-gray-700">After 100 hours in Bethesda's space epic, here's our verdict...</p>
               <div class="flex justify-between items-center mt-3">
-                <span class="text-neon-purple text-sm">by SpaceExplorer</span>
-                <span class="text-gray-400 text-sm">2023-09-15</span>
+                <span class="dark:text-neon-purple light:text-purple-500 text-sm">by SpaceExplorer</span>
+                <span class="dark:text-gray-400 light:text-gray-500 text-sm">2023-09-15</span>
               </div>
             </div>
           </div>
           
-          <div class="mt-8 p-4 bg-gamer-dark/70 border border-neon-blue/30 rounded-lg">
-            <h3 class="text-xl font-bold text-neon-pink">Ready to Post?</h3>
+          <div class="mt-8 p-4 border rounded-lg dark:bg-gamer-dark/70 dark:border-neon-blue/30 light:bg-gray-50/70 light:border-light-accent/30">
+            <h3 class="text-xl font-bold dark:text-neon-pink light:text-purple-600">Ready to Post?</h3>
             <div class="mt-2 space-x-4">
-              <a href="{% url 'blogapp:login' %}" class="text-neon-blue hover:text-neon-pink">Login</a>
-              <a href="{% url 'blogapp:register' %}" class="text-neon-blue hover:text-neon-pink">Register</a>
+              <a href="{% url 'blogapp:login' %}" class="dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600">Login</a>
+              <a href="{% url 'blogapp:register' %}" class="dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600">Register</a>
             </div>
           </div>
         {% endblock %}
@@ -218,6 +263,7 @@
   </main>
 
   <script>
+    // Persist dark mode setting
     document.addEventListener('DOMContentLoaded', () => {
       const prefersDark = localStorage.getItem('theme') === 'dark' || 
                          (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -226,6 +272,7 @@
       
       if (prefersDark) {
         body.classList.add('dark');
+        body.classList.remove('light');
         if (icon) {
           icon.textContent = '🌙';
           icon.style.textShadow = '0 0 5px #00f0ff';
@@ -233,6 +280,8 @@
         const label = document.getElementById('theme-label');
         if (label) label.textContent = 'Modo Oscuro';
       } else {
+        body.classList.add('light');
+        body.classList.remove('dark');
         if (icon) icon.textContent = '🌞';
         const label = document.getElementById('theme-label');
         if (label) label.textContent = 'Modo Claro';
@@ -242,7 +291,11 @@
     function toggleDarkMode() {
       const body = document.getElementById('body');
       const icon = document.getElementById('theme-icon');
-      const isDark = body.classList.toggle('dark');
+      
+      const isDark = !body.classList.contains('dark');
+      body.classList.toggle('dark', isDark);
+      body.classList.toggle('light', !isDark);
+      
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
       
       if (icon) {
@@ -264,28 +317,9 @@
         }, 250);
       }
     }
-    
-    // Efecto de tecleo para los títulos
-    document.querySelectorAll('.typewriter').forEach((element) => {
-      const text = element.textContent;
-      element.textContent = '';
-      let i = 0;
-      const typing = setInterval(() => {
-        if (i < text.length) {
-          element.textContent += text.charAt(i);
-          i++;
-        } else {
-          clearInterval(typing);
-        }
-      }, 100);
-    });
   </script>
 </body>
 </html>
-
-
-
-
 
 
 
