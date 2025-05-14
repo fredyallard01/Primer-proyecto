@@ -3,6 +3,8 @@ from django.urls import path
 from .views import BlogListView, BlogDetailView, ReviewCreateView, CommentCreateView, BlogCreateView
 from django.contrib.auth import views as auth_views
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 app_name = 'blogapp'
 
@@ -18,4 +20,11 @@ urlpatterns = [
     path('register/',views.RegisterView.as_view(), name='register'),
     path('profile/edit',views.ProfileEditView.as_view(), name='edit_profile'),
     path('dashboard/', views.AdminDashboardView.as_view(), name='admin_dashboard'),
+
+    path('upload/', views.upload_image, name='upload_image'),
 ]
+
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,48 +1,19 @@
-from django.shortcuts import redirect, render #Redirige a una URL especifica
-from django.views import View
+from django.shortcuts import redirect #Redirige a una URL especifica
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
-from blogapp import models
 from .models import Blog, Review, Comment
 from django.contrib.auth.mixins import LoginRequiredMixin #Restringe el acceso a usuarios autenticados
 from django.contrib.auth.models import User
 from .forms import RegisterForm
 from django.contrib import messages
-from django.db.models import Avg, Count
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
+from django.db.models import Avg
 
 
 
-class BlogListView(ListView):
-    model = Blog
-    template_name = 'blogapp/blog_list.html'
+class BlogListView(ListView): #Muestra una lista de blogs
+    model = Blog #Modelo asociado
+    template_name = 'blogapp/blog_list.html' #Se especifica la plantilla HTML guardada en (blogapp/blog_list.html)
 
-    def get_queryset(self):
-        genre = self.request.GET.get('genre')
-
-        if genre:
-            return Blog.objects.filter(genre=genre).annotate(average_rating=Avg('reviews__rating'))
-        
-        return Blog.objects.all().annotate(average_rating=Avg('reviews__rating'))
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['genres'] = Blog.GAMES_GENRES
-
-        context['top_rated_blogs'] = Blog.objects.annotate(
-            average_rating=Avg('reviews__rating')
-        ).order_by('-average_rating')[:5]
-
-        context['most_commented_blogs'] = Blog.objects.annotate(
-            comment_count=Count('reviews__comments'),
-            average_rating=Avg('reviews__rating')
-        ).order_by('-comment_count')[:5]
-
-        return context
 
 class BlogDetailView(DetailView): #Muestra los detalles de un blog específico
     model = Blog
@@ -54,12 +25,13 @@ class BlogDetailView(DetailView): #Muestra los detalles de un blog específico
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         blog = self.object
-        context['average_rating'] = blog.reviews.aggregate(Avg('rating'))['rating__avg']
+        average_rating = blog.reviews.aggregate(Avg('rating'))['rating__avg']
+        context['average_rating'] = average_rating
         return context
 
 class BlogCreateView(LoginRequiredMixin, CreateView): #Permite a un usuario autenticado crear un nuevo blog
     model = Blog
-    fields = ['genre','title', 'content',] #Campos del formulario (title, content)
+    fields = ['title', 'content'] #Campos del formulario (title, content)
     template_name = 'blog_form.html'
 
     def form_valid(self, form):
@@ -116,7 +88,7 @@ class CommentCreateView(LoginRequiredMixin,CreateView): #Permite a un usuario au
 class RegisterView(CreateView): #Permite a un usuario registrarse en la aplicación
     form_class = RegisterForm
     template_name = 'blogapp/register.html'
-    success_url = '/login/'
+    success_url = reverse_lazy('blogapp/login')
 
     def form_invalid(self, form):
         print(form.errors)
@@ -131,31 +103,4 @@ class ProfileEditView(LoginRequiredMixin,UpdateView): #Permite a un usuario aute
     def get_object(self): #Devuelve el usuario autenticado actual para editar su perfil
         return self.request.user
     
-class AdminDashboardView(View):
-    def get(self, request):
-        if not request.user.is_staff:
-            return redirect('blogapp:blog_list')
 
-        total_blogs = Blog.objects.count()
-        blogs_by_genre = Blog.objects.values('genre').annotate(count=Count('id'))
-        total_reviews = Review.objects.count()
-        total_comments = Comment.objects.count()
-
-        context = {
-            'total_blogs': total_blogs,
-            'blogs_by_genre': blogs_by_genre,
-            'total_reviews': total_reviews,
-            'total_comments': total_comments
-        }
-
-        return render(request, 'blogapp/admin_dashboard.html', context)
-    
-
-@csrf_exempt  # Puedes quitar esto si usas correctamente el CSRF token
-def upload_image(request):
-    if request.method == 'POST' and request.FILES.get('upload'):
-        image = request.FILES['upload']
-        path = default_storage.save(f'uploads/{image.name}', ContentFile(image.read()))
-        image_url = default_storage.url(path)
-        return JsonResponse({'url': image_url})
-    return JsonResponse({'error': 'Upload failed'}, status=400)
