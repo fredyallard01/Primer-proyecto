@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
-  <h1 class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">All Blogs</h1>
-  <div class="grid gap-6">
-    {% for blog in object_list %}
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
-        <h2 class="text-xl font-semibold mb-2">
-          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
+<div class="grid grid-cols-2 gap-6 border-t border-gray-300 pt-6 mb-10">
 
-          <p class="text-yellow-400 text-lg leading-none">
-            {% if blog.average_rating %}
+  <div class="border-r border-gray-400 pr-4">
+    <h2 class="text-xl font-bold mb-4 text-center">Top 5 más comentados</h2>
+    <ul class="space-y-4">
+      {% for blog in most_commented_blogs %}
+      <li class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900">
+        <h3 class="text-lg font-semibold mb-1">
+          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
+        </h3>
+        <p class="text-yellow-400 text-lg leading-none">
+          {% if blog.average_rating %}
             {% for i in "12345" %}
               {% if forloop.counter <= blog.average_rating %}
                 ★
@@ -19,17 +23,107 @@
             <span class="ml-2 text-gray-600 dark:text-gray-400">
               {{ blog.average_rating|floatformat:1 }}/5
             </span>
-            {% else %}
+          {% else %}
             <span class="text-gray-600 dark:text-gray-400">
               No tiene calificaciones aún
             </span>
-            {% endif %}
-          </p>
-        </h2>
+          {% endif %}
+        </p>
         <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }}</p>
-      </div>
-    {% empty %}
+      </li>
+      {% empty %}
       <p class="text-gray-500 dark:text-gray-400 text-center">No blogs have been posted yet.</p>
-    {% endfor %}
+      {% endfor %}
+    </ul>
   </div>
+
+  <div class="pl-4">
+    <h2 class="text-xl font-bold mb-4 text-center">Top 5 mejor puntuados</h2>
+    <ul class="space-y-4">
+      {% for blog in top_rated_blogs %}
+      <li class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900">
+        <h3 class="text-lg font-semibold mb-1">
+          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
+        </h3>
+        <p class="text-yellow-400 text-lg leading-none">
+          {% if blog.average_rating %}
+            {% for i in "12345" %}
+              {% if forloop.counter <= blog.average_rating %}
+                ★
+              {% else %}
+                ☆
+              {% endif %}
+            {% endfor %}
+            <span class="ml-2 text-gray-600 dark:text-gray-400">
+              {{ blog.average_rating|floatformat:1 }}/5
+            </span>
+          {% else %}
+            <span class="text-gray-600 dark:text-gray-400">
+              No tiene calificaciones aún
+            </span>
+          {% endif %}
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }}</p>
+      </li>
+      {% empty %}
+      <p class="text-gray-500 dark:text-gray-400 text-center">No blogs have been posted yet.</p>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
+
+
+<h1 class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">
+  {% if request.GET.genre %}
+    {{ request.GET.genre}} Blogs
+  {% else %}
+    All Blogs
+  {% endif %}
+</h1>
+
+<form method="get" action="{% url 'blogapp:blog_list' %}">
+  <label for="genre" class="block text-gray-700 dark:text-gray-300 mb-2">Select Genre:</label>
+  <select name="genre" id="genre" class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white p-2 rounded-md">
+    <option value="">All Genres</option>
+    {% for value, label in genres %}
+      <option value="{{ value }}" {% if request.GET.genre == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="ml-2 bg-blue-500 text-white p-2 rounded-md">Filter</button>
+</form>
+
+
+
+<div class="grid gap-6 mt-6">
+  {% for blog in object_list %}
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
+      <h2 class="text-xl font-semibold mb-2">
+        <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
+
+        <p class="text-yellow-400 text-lg leading-none">
+          {% if blog.average_rating %}
+          {% for i in "12345" %}
+            {% if forloop.counter <= blog.average_rating %}
+              ★
+            {% else %}
+              ☆
+            {% endif %}
+          {% endfor %}
+          <span class="ml-2 text-gray-600 dark:text-gray-400">
+            {{ blog.average_rating|floatformat:1 }}/5
+          </span>
+          {% else %}
+          <span class="text-gray-600 dark:text-gray-400">
+            No tiene calificaciones aún
+          </span>
+          {% endif %}
+        </p>
+      </h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }}</p>
+    </div>
+  {% empty %}
+    <p class="text-gray-500 dark:text-gray-400 text-center">No blogs have been posted yet.</p>
+  {% endfor %}
+</div>
 {% endblock %}

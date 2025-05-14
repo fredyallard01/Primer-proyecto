@@ -13,50 +13,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
             color: #00f0ff;
             overflow-y: auto;
             padding: 20px;
-        }
-        
-        /* Efecto de grid futurista */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                linear-gradient(to right, rgba(0, 240, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: 0;
-        }
-        
-        /* Efecto de scanlines */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 0%,
-                rgba(0, 240, 255, 0.05) 50%,
-                transparent 100%
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            animation: scanline 8s linear infinite;
-            z-index: 1;
-        }
-        
-        @keyframes scanline {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
         }
         
         .register-container {
@@ -207,71 +166,53 @@
 </head>
 <body>
     <div class="register-container">
-        <h2>BIENVENIDO A GAMESHUB</h2>
+        <h2>Bienvenido a</h2>    
+        <h2>GamesHub</h2>
+
         <p class="subtitle">Regístrate para acceder al mejor portal sobre el mundo de los videojuegos.</p>
 
-       
+        <form onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="username">USUARIO</label>
+                <input type="text" id="username" name="username" placeholder="" required>
+            </div>
+            
+            <div class="name-fields">
+                <div class="form-group">
+                    <label for="nombre">NOMBRE</label>
+                    <input type="text" id="nombre" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="apellido">APELLIDO</label>
+                    <input type="text" id="apellido" placeholder="" required>
+                </div>
+            </div>
 
-    <form method="post">
-      {% csrf_token %}
-      
-      {% if form.non_field_errors %}
-        <div class="mb-4 text-red-500">
-          {% for error in form.non_field_errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
+            <div class="form-group">
+                <label for="email">CORREO ELECTRÓNICO</label>
+                <input type="email" id="email" placeholder="" required>
+            </div>
 
-      <div class="mb-4 flex flex-col gap-2 md:flex-row md:gap-4">
-        <input type="text" placeholder="Nombre" name="first_name" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
-        <input type="text" placeholder="Apellido" name="last_name" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
-      </div>
-      
-      <input type="text" name="username" placeholder="Nombre de usuario" class="w-full mb-4 rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
-      {% if form.username.errors %}
-        <div class="text-red-500">
-          {% for error in form.username.errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
+            <div class="form-group">
+                <label for="password">CONTRASEÑA</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
 
-      <input type="email" placeholder="Correo electrónico" name="email" class="w-full mb-4 rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
-      {% if form.email.errors %}
-        <div class="text-red-500">
-          {% for error in form.email.errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
+            <div class="form-group">
+                <label for="confirm-password">CONFIRMAR CONTRASEÑA</label>
+                <input type="password" id="confirm-password" placeholder="••••••••" required>
+            </div>
 
-      <input type="password" placeholder="Contraseña" name="password1" class="w-full mb-4 rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
-      {% if form.password1.errors %}
-        <div class="text-red-500">
-          {% for error in form.password1.errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
+            <button type="submit">CREAR CUENTA</button>
+        </form>
+    </div>
 
-      <input type="password" placeholder="Confirmar Contraseña" name="password2" class="w-full mb-6 rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
-      {% if form.password2.errors %}
-        <div class="text-red-500">
-          {% for error in form.password2.errors %}
-            <p>{{ error }}</p>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-      <button type="submit" class="group relative block w-full h-10 rounded-md bg-gradient-to-br from-black to-neutral-700 text-white font-medium shadow-[inset_0_1px_0_#ffffff40,inset_0_-1px_0_#ffffff40]">
-        Regístrate →
-        <span class="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition group-hover:opacity-100"></span>
-        <span class="absolute inset-x-10 -bottom-px mx-auto h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition group-hover:opacity-100"></span>
-      </button>
-      <div class="my-6 h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent"></div>
-      </div>
-    </form>
-  </div>
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault();
+            console.log("Formulario enviado");
+            // Aquí iría la lógica de registro
+        }
+    </script>
 </body>
 </html>

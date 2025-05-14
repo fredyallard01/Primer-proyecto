@@ -5,12 +5,30 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 # MODELOS
- 
+
+
 class Blog(models.Model): #Representa una entrada de blog
+    GAMES_GENRES = [
+        ('ACCION', 'Acción'),
+        ('AVENTURA', 'Aventura'),
+        ('ESTRATEGIA', 'Estrategia'),
+        ('RPG', 'RPG'),
+        ('SIMULADOR', 'Simulador'),
+        ('DEPORTES', 'Deportes'),
+        ('PUZZLES', 'Puzzles'),
+        ('SANDBOX', 'Sandbox'),
+        ('ARCADE', 'Arcade'),
+        ('MOBA', 'MOBA'),
+        ('SHOOTER', 'Shooter'),
+        ('JUEGOS_MUSICALES', 'Juegos Musicales'),
+        ('SUPERVIVENCIAS', 'Supervivencias'),
+        ('SOULSLIKE', 'Soulslike'),
+    ]
     title = models.CharField(max_length=200)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE) # Relación con el modelo User (autor del blog). Si el usuario es eliminado, los blogs asociados también se eliminan (on_delete=models.CASCADE).
     created_at = models.DateTimeField(auto_now_add=True)
+    genre = models.CharField(max_length=20, choices=GAMES_GENRES)
 
     def __str__(self):
         return self.title
