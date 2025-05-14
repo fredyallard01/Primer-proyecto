@@ -295,6 +295,8 @@
       const html = document.documentElement;
       const icon = document.getElementById('theme-icon');
       
+      const label = document.getElementById('theme-label'); 
+
       const isDark = !body.classList.contains('dark');
       body.classList.toggle('dark', isDark);
       body.classList.toggle('light', !isDark);
