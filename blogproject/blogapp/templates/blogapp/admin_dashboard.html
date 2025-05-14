@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-900 rounded shadow">
+  <h1 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Panel Administrativo</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded">
+      <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Total de Blogs</h2>
+      <p class="text-3xl font-bold text-blue-500">{{ total_blogs }}</p>
+    </div>
+
+    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded">
+      <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Total de Reviews</h2>
+      <p class="text-3xl font-bold text-green-500">{{ total_reviews }}</p>
+    </div>
+
+    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded">
+      <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Total de Comentarios</h2>
+      <p class="text-3xl font-bold text-yellow-500">{{ total_comments }}</p>
+    </div>
+
+    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded">
+      <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Blogs por Género</h2>
+      <ul class="mt-2 space-y-2">
+        {% for item in blogs_by_genre %}
+        <li class="flex justify-between text-gray-600 dark:text-gray-300">
+          <span>{{ item.genre|default:"Sin género" }}</span>
+          <span>{{ item.count }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

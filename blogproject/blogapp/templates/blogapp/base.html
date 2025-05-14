@@ -47,6 +47,7 @@
   
   <style>
     html {
+      
       scroll-behavior: smooth;
     }
     
@@ -205,7 +206,12 @@
             <a href="{% url 'blogapp:edit_profile' %}" class="dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600 transition-colors">Editar Perfil</a>
             <form action="{% url 'blogapp:logout' %}" method="post">
               {% csrf_token %}
-              <button type="submit" class="dark:text-red-400 dark:hover:text-red-300 light:text-red-500 light:hover:text-red-600 transition-colors">Logout</button>
+              <button type="submit" class="text-red-400 hover:text-red-300 transition-colors">Logout</button>
+              {% if request.user.is_staff %}
+              <div class="text-right mb-4">
+                <a href="{% url 'blogapp:admin_dashboard' %}"class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300">Panel Administrativo</a>
+              </div>
+            {% endif %}
             </form>
           </div>
         {% else %}
@@ -264,11 +270,10 @@
   <script>
     // Persist dark mode setting
     document.addEventListener('DOMContentLoaded', () => {
-      const prefersDark = localStorage.getItem('theme') === 'dark' || 
-                         (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      const body = document.getElementById('body');
+      const prefersDark = localStorage.getItem('theme') === 'dark';
+      const html = document.documentElement;
       const icon = document.getElementById('theme-icon');
-      
+      const label = document.getElementById('theme-label');
       if (prefersDark) {
         body.classList.add('dark');
         body.classList.remove('light');
@@ -282,13 +287,12 @@
         body.classList.add('light');
         body.classList.remove('dark');
         if (icon) icon.textContent = '🌞';
-        const label = document.getElementById('theme-label');
         if (label) label.textContent = 'Modo Claro';
       }
     });
 
     function toggleDarkMode() {
-      const body = document.getElementById('body');
+      const html = document.documentElement;
       const icon = document.getElementById('theme-icon');
       
       const isDark = !body.classList.contains('dark');
@@ -296,22 +300,16 @@
       body.classList.toggle('light', !isDark);
       
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      
       if (icon) {
         icon.classList.add('rotate-180');
         setTimeout(() => {
           icon.textContent = isDark ? '🌙' : '🌞';
-          if (isDark) {
-            icon.style.textShadow = '0 0 5px #00f0ff';
-          } else {
-            icon.style.textShadow = 'none';
+          if (label) {label.style.opacity = 0;
+            setTimeout(() => {
+              label.textContent = isDark ? 'Modo Oscuro' : 'Modo Claro';
+              label.style.opacity = 1;
+            }, 250);
           }
-          const label = document.getElementById('theme-label');
-          if (label) label.style.opacity = 0;
-          setTimeout(() => {
-            label.textContent = isDark ? 'Modo Oscuro' : 'Modo Claro';
-            label.style.opacity = 1;
-          }, 250);
           icon.classList.remove('rotate-180');
         }, 250);
       }
