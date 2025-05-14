@@ -2,12 +2,19 @@
 {% load widget_tweaks %}
 {% block content %}
   <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Create a New Blog</h1>
-  <form method="post" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">{% csrf_token %}
+  <form method="post" enctype="multipart/form-data" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">
+    {% csrf_token %}
     <div class="space-y-2 transition-all duration-700 ease-in-out">
       {% for field in form %}
         <div>
           <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">{{ field.label }}</label>
-          {{ field|add_class:"bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+
+          {% if field.name == "content" %}
+            <textarea id="editor" name="{{ field.name }}" class="w-full min-h-screen"></textarea>
+          {% else %}
+            {{ field|add_class:"w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+          {% endif %}
+
           {% if field.errors %}
             <p class="text-red-500 text-sm">{{ field.errors|striptags }}</p>
           {% endif %}
@@ -15,5 +22,94 @@
       {% endfor %}
     </div>
     <button type="submit" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700 rounded transition-all duration-500 ease-in-out">Post Blog</button>
+
+    <!-- CKEditor 5 -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+    <script>
+      function getCSRFToken() {
+        const name = 'csrftoken';
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const c = cookies[i].trim();
+          if (c.startsWith(name + '=')) {
+            return decodeURIComponent(c.substring(name.length + 1));
+          }
+        }
+        return '';
+      }
+
+      class MyUploadAdapter {
+        constructor(loader) {
+          this.loader = loader;
+        }
+
+        upload() {
+          return this.loader.file.then(file => {
+            const data = new FormData();
+            data.append('upload', file);
+
+            return fetch('/upload/', {
+              method: 'POST',
+              headers: {
+                'X-CSRFToken': getCSRFToken()
+              },
+              body: data
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Upload failed');
+              }
+              return response.json();
+            })
+            .then(data => ({
+              default: data.url
+            }));
+          });
+        }
+
+        abort() {}
+      }
+
+      function MyCustomUploadAdapterPlugin(editor) {
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+          return new MyUploadAdapter(loader);
+        };
+      }
+
+      ClassicEditor
+        .create(document.querySelector('#editor'), {
+          extraPlugins: [MyCustomUploadAdapterPlugin],
+          toolbar: [
+            'heading', '|', 'bold', 'italic', 'underline', 'fontSize', 'fontFamily', '|',
+            'link', 'blockQuote', 'imageUpload', 'insertTable', 'mediaEmbed', '|',
+            'undo', 'redo'
+          ],
+        })
+        .then(editor => {
+          editor.editing.view.change(writer => writer.setStyle('min-height', '90vh', editor.editing.view.document.getRoot()));
+          const editableElement = editor.ui.view.editable.element;
+
+          const isDark = document.documentElement.classList.contains('dark');
+          if (isDark) {
+            editor.editing.view.change(writer => {
+              writer.setStyle('background-color', '#374151', editor.editing.view.document.getRoot());
+              writer.setStyle('color', '#D1D5DB', editor.editing.view.document.getRoot());
+            });
+          }
+
+          editableElement.classList.add(
+            'bg-white', 'dark:bg-gray-700',
+            'text-gray-900', 'dark:text-gray-300',
+            'px-4', 'py-2',
+            'rounded-lg',
+            'border', 'border-gray-300', 'dark:border-gray-600',
+            'focus:outline-none', 'focus:ring-2', 'focus:ring-blue-500'
+          );
+        })
+        .catch(error => {
+          console.error('Error initializing CKEditor:', error);
+        });
+    </script>
   </form>
 {% endblock %}

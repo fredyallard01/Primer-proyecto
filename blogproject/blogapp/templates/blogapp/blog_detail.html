@@ -21,7 +21,9 @@
       </span>
       {% endif %}
     </p>
-    <p class="text-gray-700 dark:text-gray-300 mb-4">{{ object.content }}</p>
+    <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 mb-4">
+      {{ object.content|safe }}
+    </div>    
     <p class="text-sm text-gray-600 dark:text-gray-500">By {{ object.author.username }} - {{ object.created_at }}</p>
   </article>
 
