@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión en GamesHub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            font-family: 'Press Start 2P', monospace;
+            background-color: #080416;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: url('URL_DE_LA_IMAGEN_DE_FONDO'); /* Reemplazar con la URL de la imagen de fondo */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            background-color: rgba(30, 30, 30, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(100, 149, 237, 0.5);
+            text-align: center;
+            border: 1px solid #4a4a4a;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #ff77ff;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px #ff00ff;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #00ffff;
+            font-size: 0.8em;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 1px solid #555555;
+            border-radius: 5px;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #64b5f6;
+            box-shadow: 0 0 10px rgba(100, 149, 237, 0.7);
+        }
+
+        button {
+            background: linear-gradient(to right, #00ffff, #ff00ff);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            width: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #00bfff, #e000e0);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .register-link {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #cccccc;
+        }
+
+        .register-link a {
+            color: #00ffff;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a</h1>
+        <h2>GamesHub</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="usuario">USUARIO</label>
+                <input type="text" id="usuario" name="usuario" required>
+                <div id="usuario-error" class="error-message"></div>
+            </div>
+            <div class="form-group">
+                <label for="contrasena">CONTRASEÑA</label>
+                <input type="password" id="contrasena" name="contrasena" required>
+                <div id="contrasena-error" class="error-message"></div>
+            </div>
+            <button type="submit">CONECTAR</button>
+        </form>
+        <div class="register-link">
+            ¿No tienes una cuenta? <a href="/register">REGISTRARSE</a>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const usuarioInput = document.getElementById('usuario');
+        const contrasenaInput = document.getElementById('contrasena');
+        const usuarioError = document.getElementById('usuario-error');
+        const contrasenaError = document.getElementById('contrasena-error');
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            let isValid = true;
+
+            if (!usuarioInput.value.trim()) {
+                usuarioError.textContent = 'Por favor, ingresa tu nombre de usuario.';
+                isValid = false;
+            } else {
+                usuarioError.textContent = '';
+            }
+
+            if (!contrasenaInput.value.trim()) {
+                contrasenaError.textContent = 'Por favor, ingresa tu contraseña.';
+                isValid = false;
+            } else {
+                contrasenaError.textContent = '';
+            }
+
+            if (isValid) {
+                // Aquí deberías enviar los datos al servidor para la autenticación
+                // Por ejemplo:
+                // fetch('/login', {
+                //     method: 'POST',
+                //     body: JSON.stringify({ usuario: usuarioInput.value, contrasena: contrasenaInput.value }),
+                //     headers: { 'Content-Type': 'application/json' }
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     if (data.success) {
+                //         window.location.href = '/dashboard'; // Redirigir a la página de inicio
+                //     } else {
+                //         alert('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+                //     }
+                // })
+                // .catch(error => {
+                //     console.error('Error:', error);
+                //     alert('Ocurrió un error al iniciar sesión. Por favor, inténtalo de nuevo.');
+                // });
+                alert('Inicio de sesión simulado. Redirigiendo...'); // Simulación de inicio de sesión
+                window.location.href = '/dashboard'; // Redirigir a una página simulada
+            }
+        });
+    </script>
+</body>
+</html>
