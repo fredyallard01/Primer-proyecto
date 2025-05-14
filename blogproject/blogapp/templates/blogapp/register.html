@@ -171,48 +171,81 @@
 
         <p class="subtitle">Regístrate para acceder al mejor portal sobre el mundo de los videojuegos.</p>
 
-        <form onsubmit="handleSubmit(event)">
+        <form method="post">
+            {% csrf_token %}
             <div class="form-group">
+                {% if form.non_field_errors %}
+                    <div class="mb-4 text-red-500">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+
                 <label for="username">USUARIO</label>
                 <input type="text" id="username" name="username" placeholder="" required>
+
             </div>
-            
+            {% if form.username.errors %}
+                <div class="text-red-500">
+                {% for error in form.username.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="name-fields">
                 <div class="form-group">
                     <label for="nombre">NOMBRE</label>
-                    <input type="text" id="nombre" placeholder="" required>
+                    <input type="text" id="nombre" name="first_name" required>
                 </div>
                 <div class="form-group">
                     <label for="apellido">APELLIDO</label>
-                    <input type="text" id="apellido" placeholder="" required>
+                    <input type="text" id="apellido" name="last_name" placeholder="" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="email">CORREO ELECTRÓNICO</label>
-                <input type="email" id="email" placeholder="" required>
+                <input type="email" id="email" name="email" placeholder="" required>
             </div>
+
+            {% if form.email.errors %}
+                <div class="text-red-500">
+                {% for error in form.email.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
 
             <div class="form-group">
                 <label for="password">CONTRASEÑA</label>
-                <input type="password" id="password" placeholder="••••••••" required>
+                <input type="password" id="password" name="password1" placeholder="••••••••" required>
             </div>
+
+            {% if form.password1.errors %}
+                <div class="text-red-500">
+                {% for error in form.password1.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
 
             <div class="form-group">
                 <label for="confirm-password">CONFIRMAR CONTRASEÑA</label>
-                <input type="password" id="confirm-password" placeholder="••••••••" required>
+                <input type="password" id="confirm-password" name="password2" placeholder="••••••••" required>
             </div>
 
+            {% if form.password2.errors %}
+                <div class="text-red-500">
+                {% for error in form.password2.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+            
             <button type="submit">CREAR CUENTA</button>
         </form>
     </div>
-
-    <script>
-        function handleSubmit(e) {
-            e.preventDefault();
-            console.log("Formulario enviado");
-            // Aquí iría la lógica de registro
-        }
-    </script>
 </body>
 </html>

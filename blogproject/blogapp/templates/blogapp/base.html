@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GamesHub - Blog de Videojuegos</title> <!--Título de la pestaña del navegador-->
   <script src="https://cdn.tailwindcss.com"></script>
+  </script>
+  <script>
+    (function () {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <script>
     tailwind.config = { <!--Se configuran los colores y las animaciones que se usarán para el tema Gamer del Blog-->
-      darkMode: 'class', <!--Clase para usar el modo oscuro-->
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -43,6 +52,7 @@
       plugins: []
     };
   </script>
+  
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet"> <!--De aquí se sacan las fuentes de letras que se usarán en el blog-->
   
   <style>
@@ -275,8 +285,8 @@
       const icon = document.getElementById('theme-icon');
       const label = document.getElementById('theme-label');
       if (prefersDark) {
-        body.classList.add('dark');
-        body.classList.remove('light');
+        html.classList.add('dark');
+        html.classList.remove('light');
         if (icon) {
           icon.textContent = '🌙';
           icon.style.textShadow = '0 0 5px #00f0ff';
@@ -284,8 +294,8 @@
         const label = document.getElementById('theme-label');
         if (label) label.textContent = 'Modo Oscuro';
       } else {
-        body.classList.add('light');
-        body.classList.remove('dark');
+        html.classList.add('light');
+        html.classList.remove('dark');
         if (icon) icon.textContent = '🌞';
         if (label) label.textContent = 'Modo Claro';
       }
@@ -297,9 +307,9 @@
       
       const label = document.getElementById('theme-label'); 
 
-      const isDark = !body.classList.contains('dark');
-      body.classList.toggle('dark', isDark);
-      body.classList.toggle('light', !isDark);
+      const isDark = !html.classList.contains('dark');
+      html.classList.toggle('dark', isDark);
+      html.classList.toggle('light', !isDark);
       
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
       if (icon) {
