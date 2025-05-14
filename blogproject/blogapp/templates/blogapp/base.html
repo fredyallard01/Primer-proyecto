@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GamesHub - Blog de Videojuegos</title>
+  <title>GamesHub - Blog de Videojuegos</title> <!--Título de la pestaña del navegador-->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    tailwind.config = {
-      darkMode: 'class',
+    tailwind.config = { <!--Se configuran los colores y las animaciones que se usarán para el tema Gamer del Blog-->
+      darkMode: 'class', <!--Clase para usar el modo oscuro-->
       theme: {
         extend: {
           colors: {
@@ -43,7 +43,7 @@
       plugins: []
     };
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet"> <!--De aquí se sacan las fuentes de letras que se usarán en el blog-->
   
   <style>
     html {
@@ -180,8 +180,7 @@
 <body id="body" class="flex flex-col min-h-screen font-orbitron transition-all duration-700 ease-in-out scanlines dark:bg-gamer-dark dark:text-gray-100 light:bg-light-primary light:text-gray-900">
   <!-- Fondo de pantalla de juego - diferente para cada modo -->
   <div class="fixed inset-0 -z-10 overflow-hidden opacity-70">
-    <!-- Elimina esta línea -->
-    <!-- <div class="absolute inset-0 dark:bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=3000&auto=format&fit=crop')] light:bg-[url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3000&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay"></div> -->
+    
     <div class="absolute inset-0 dark:bg-gradient-to-b from-neon-blue/10 via-neon-purple/10 to-neon-pink/10 light:bg-gradient-to-b from-light-accent/10 via-purple-500/10 to-pink-500/10"></div>
     <div class="grid-pattern"></div>
   </div>

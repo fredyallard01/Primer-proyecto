@@ -1,6 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} <!--Hace que la plantilla de base.html se extienda hasta este archivo, heredando diseños y estructura general-->
 {% load widget_tweaks %}
 {% block content %}
+<!--Artículo principal-->
   <article class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
     <h1 class="text-3xl font-bold mb-2">{{ object.title }}</h1>
     <p class="text-yellow-400 text-lg leading-none">
@@ -25,6 +26,7 @@
     <p class="text-sm text-gray-600 dark:text-gray-500">By {{ object.author.username }} - {{ object.created_at }}</p>
   </article>
 
+  <!--Sección de las reviews-->
   <section class="mt-8">
     <h2 class="text-2xl font-semibold mb-4 dark:text-white">Reviews</h2>
 
@@ -67,6 +69,7 @@
     {% endfor %}
     <a href="{% url 'blogapp:add_review' object.pk %}" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">Add Review</a>
 
+    <!--Muestra mensajes como errores o confirmaciones-->
     {% if messages %}
       <div class="max-w-2xl mx-auto mb-4">
         {% for message in messages %}
