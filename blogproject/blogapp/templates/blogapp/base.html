@@ -166,14 +166,15 @@
     
     /* Grid - diferente para cada modo */
     .grid-pattern {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-size: 30px 30px;
-      z-index: -2;
-    }
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: 30px 30px;
+  z-index: 1;
+  pointer-events: none;
+}
     
     .dark .grid-pattern {
       background-image: 
@@ -190,12 +191,12 @@
 </head>
 <body id="body" class="flex flex-col min-h-screen font-orbitron transition-all duration-700 ease-in-out scanlines dark:bg-gamer-dark dark:text-gray-100 light:bg-light-primary light:text-gray-900">
   <!-- Fondo de pantalla de juego - diferente para cada modo -->
-  <div class="fixed inset-0 -z-10 overflow-hidden opacity-70">
-    
-    <div class="absolute inset-0 dark:bg-gradient-to-b from-neon-blue/10 via-neon-purple/10 to-neon-pink/10 light:bg-gradient-to-b from-light-accent/10 via-purple-500/10 to-pink-500/10"></div>
-    <div class="grid-pattern"></div>
+  <div class="fixed inset-0 overflow-hidden opacity-70" style="pointer-events: none;">
+  <div class="absolute inset-0" style="z-index:0; pointer-events: none;">
+    <div class="w-full h-full dark:bg-gradient-to-b from-neon-blue/10 via-neon-purple/10 to-neon-pink/10 dark:opacity-20 light:bg-gradient-to-b from-light-accent/10 via-purple-500/10 to-pink-500/10"></div>
   </div>
-
+  <div class="grid-pattern" style="position:absolute; inset:0; z-index:1; pointer-events: none;"></div>
+</div>
   <!-- Barra de navegación - estilos para ambos modos -->
   <nav class="dark:bg-gamer-dark/80 light:bg-white/80 backdrop-blur-md border-b-2 dark:border-neon-blue/30 light:border-light-accent/30 py-4 px-6 transition-all shadow-lg dark:shadow-neon-blue/10 light:shadow-light-accent/10">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
