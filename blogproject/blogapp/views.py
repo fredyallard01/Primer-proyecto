@@ -3,7 +3,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from blogapp import models
-from .models import Blog, Review, Comment
+from .models import Blog, Review, Comment, UserProfile
 from django.contrib.auth.mixins import LoginRequiredMixin #Restringe el acceso a usuarios autenticados
 from django.contrib.auth.models import User
 from .forms import RegisterForm
@@ -122,14 +122,30 @@ class RegisterView(CreateView): #Permite a un usuario registrarse en la aplicaci
         print(form.errors)
         return super().form_invalid(form)
 
-class ProfileEditView(LoginRequiredMixin,UpdateView): #Permite a un usuario autenticado editar su perfil
+class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = User
-    fields = ['username','first_name','last_name','email']
+    fields = ['username', 'first_name', 'last_name', 'email']
     template_name = 'blogapp/edit_profile.html'
     success_url = '/profile/edit'
 
-    def get_object(self): #Devuelve el usuario autenticado actual para editar su perfil
-        return self.request.user
+    def get_object(self):
+        return self.request.user 
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+
+            profile, _ = UserProfile.objects.get_or_create(user=self.object)
+            if 'profile-photo' in request.FILES:
+                profile.profile_picture = request.FILES['profile-photo']
+                profile.save()
+
+            return redirect(self.success_url)
+
+        return self.form_invalid(form)
     
 class AdminDashboardView(View):
     def get(self, request):
