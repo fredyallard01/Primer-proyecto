@@ -3,292 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro en GanesHub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>GamesHub - Editar Perfil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
+            margin: 0;
+            min-height: 100vh;
             font-family: 'Orbitron', sans-serif;
-            background-color: #080416;
-            color: #e0e0e0;
+            background-color: #0a0a12;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-
-        .double-border-container {
             position: relative;
-            padding: 5px;
-            border-radius: 12px;
-            background: 
-                linear-gradient(#080416, #080416) padding-box,
-                linear-gradient(to right, #00f0ff, #ff00f0) border-box;
-            border: 2px solid transparent;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5),
-                        0 0 15px rgba(255, 0, 240, 0.5);
+            color: #00f0ff;
+            overflow-y: auto;
+            padding: 20px;
         }
-
-        .container {
-            background-color: rgba(30, 30, 30, 0.9);
-            padding: 30px;
+        
+        /* Efecto de grid futurista */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(to right, rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        
+        /* Efecto de scanlines */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(0, 240, 255, 0.05) 50%,
+                transparent 100%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scanline 8s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes scanline {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100%; }
+        }
+        
+        .register-container {
+            position: relative;
+            background-color: rgba(10, 10, 18, 0.9);
+            padding: 40px;
             border-radius: 8px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 90%;
-            max-width: 500px;
-        }
-
-        h1 {
-            color: #64b5f6;
-            font-size: 1.5em;
-            margin-bottom: 5px;
-            text-shadow: 3px 3px 6px #007bff;
-            font-weight: 500;
-            letter-spacing: 1px;
-        }
-
-        h2 {
-            color: #64b5f6;
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            text-shadow: 3px 3px 6px #007bff;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        p {
-            color: #cccccc;
-            margin-bottom: 30px;
-            font-size: 0.9em;
-            width: 80%;
-            text-align: center;
-            line-height: 1.5;
-            font-weight: 400;
-        }
-
-        .form-container {
             width: 100%;
             max-width: 400px;
+            z-index: 10;
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), 
+                        inset 0 0 20px rgba(0, 240, 255, 0.3);
+            margin: 40px auto;
         }
-
-        .form-group {
+        
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px solid #ff00f0;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(255, 0, 240, 0.5), 
+                        inset 0 0 25px rgba(255, 0, 240, 0.3);
+            z-index: -1;
+            opacity: 0.7;
+            animation: border-pulse 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes border-pulse {
+            0% { opacity: 0.5; }
+            100% { opacity: 0.8; }
+        }
+        
+        h2 {
+            font-family: 'Press Start 2P', cursive;
+            color: #00f0ff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f0ff, 0 0 20px #00f0ff;
+            animation: glow 2s ease-in-out infinite alternate;
+            line-height: 1.4;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f0ff, 0 0 20px #00f0ff; }
+            to { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #b400ff, 0 0 40px #b400ff; }
+        }
+        
+        p.subtitle {
+            text-align: center;
+            color: #00f0ff;
             margin-bottom: 25px;
-            text-align: left;
+            font-size: 14px;
+            letter-spacing: 1px;
+            line-height: 1.5;
         }
-
-        .name-group {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-        }
-
-        .name-field {
-            width: 48%;
-        }
-
+        
         label {
             display: block;
             margin-bottom: 8px;
-            color: #00ffff;
-            font-size: 0.9em;
-            font-weight: 500;
+            font-size: 13px;
+            color: #00f0ff;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
-
+        
         input[type="text"],
         input[type="email"],
-        input[type="password"] {
+        input[type="file"],
+        input[type="password"]{
             width: 100%;
             padding: 12px;
-            border: 1px solid #555555;
-            border-radius: 5px;
-            background-color: #1e1e1e;
-            color: #e0e0e0;
-            box-sizing: border-box;
-            font-size: 1em;
+            margin-bottom: 5px;
+            background-color: rgba(20, 20, 36, 0.7);
+            border: 1px solid #00f0ff;
+            border-radius: 4px;
+            color: white;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 400;
+            transition: all 0.3s;
+            box-sizing: border-box;
         }
-
+        
         input[type="text"]:focus,
         input[type="email"]:focus,
+        input[type="file"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #64b5f6;
-            box-shadow: 0 0 10px rgba(100, 149, 237, 0.7);
+            border-color: #ff00f0;
+            box-shadow: 0 0 10px rgba(255, 0, 240, 0.5);
         }
-
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .name-fields {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 0;
+        }
+        
+        .name-fields > div {
+            flex: 1;
+            min-width: 0;
+            margin-bottom: 10px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .button-group button {
+            flex: 1;
+        }
+        
         button {
-            background: linear-gradient(to right, #00ffff, #ff00ff);
-            color: black;
-            padding: 15px;
+            padding: 14px;
+            color: #0a0a12;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: background 0.3s ease;
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-            width: 100%;
+            border-radius: 4px;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-top: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-
+        
         button:hover {
-            background: linear-gradient(to right, #00bfff, #e000e0);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.6);
         }
-
-        .error-message {
-            color: red;
-            font-size: 0.7em;
-            margin-top: 5px;
-            height: 15px;
-            font-weight: 400;
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        button:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #00f0ff, #b400ff);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, #00f0ff, #b400ff);
+            opacity: 0.8;
+        }
+        
+        .btn-secondary:hover {
+            opacity: 1;
+        }
+        
+        /* Estilos para la foto de perfil */
+        .profile-picture {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-picture-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #00f0ff;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            display: block;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+        }
+        
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 15px;
+            background: linear-gradient(to right, #00f0ff, #b400ff);
+            color: #0a0a12;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .file-input-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.6);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .input-hint {
+            font-size: 11px;
+            color: #00f0ff;
+            margin-top: -5px;
+            margin-bottom: 15px;
+            display: block;
+            opacity: 0.7;
+        }
+        
+        .input-hint.error {
+            color: #ff3e3e;
         }
     </style>
 </head>
 <body>
-    <div class="double-border-container">
-        <div class="container">
-            <h1>Bienvenido</h1>
-            <h2>GanesHub</h2>
-            <p>Regístrate para acceder al mejor portal sobre el mundo de los videojuegos.</p>
-            <style>
-                p {
-                 color: #00f0ff; /* Color cian neón */
-                text-shadow: 0 0 5px #00bfff, 0 0 10px #00bfff;
-                font-size: 1.1em; /* Efecto neón */
-                }
-            </style>
-            <div class="form-container">
-                <form action="/registrar" method="POST">
-                    <div class="form-group">
-                        <label for="usuario">USUARIO</label>
-                        <input type="text" id="usuario" name="usuario" required>
-                        <div id="usuario-error" class="error-message"></div>
-                    </div>
-                    
-                    <div class="name-group">
-                        <div class="name-field" style="text-align: left;">
-                            <label for="nombre">NOMBRE</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                            <div id="nombre-error" class="error-message"></div>
-                        </div>
-                        <div class="name-field" style="text-align: right;">
-                            <label for="apellido">APELLIDO</label>
-                            <input type="text" id="apellido" name="apellido" required>
-                            <div id="apellido-error" class="error-message"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="correo">CORREO ELECTRÓNICO</label>
-                        <input type="email" id="correo" name="correo" required>
-                        <div id="correo-error" class="error-message"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="contrasena">CONTRASEÑA</label>
-                        <input type="password" id="contrasena" name="contrasena" required>
-                        <div id="contrasena-error" class="error-message"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmar_contrasena">CONFIRMAR CONTRASEÑA</label>
-                        <input type="password" id="confirmar_contrasena" name="confirmar_contrasena" required>
-                        <div id="confirmar_contrasena-error" class="error-message"></div>
-                    </div>
-                    <button type="submit">CREAR CUENTA</button>
-                </form>
+    <div class="register-container">
+        <h2>EDITAR PERFIL</h2>
+        
+        <form id="profile-form">
+            <div class="profile-picture">
+                <img id="profile-preview" src="https://via.placeholder.com/100" alt="Foto de perfil" class="profile-picture-preview">
+                <label for="profile-photo" class="file-input-label">
+                    CAMBIAR FOTO DE PERFIL
+                </label>
+                <input type="file" id="profile-photo" class="file-input" accept="image/*">
             </div>
-        </div>
+            
+            <div class="form-group">
+                <label for="username">NOMBRE DE USUARIO</label>
+                <input type="text" id="username" name="username" placeholder="Nombre de usuario" 
+                       class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" 
+                       maxlength="150" 
+                       pattern="[a-zA-Z0-9@.+_-]+"
+                       required />
+                <span class="input-hint" id="username-hint"></span>
+            </div>
+            
+            <div class="name-fields">
+                <div class="form-group">
+                    <label for="first_name">NOMBRE</label>
+                    <input type="text" id="first_name" placeholder="Nombre" name="first_name" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+                </div>
+                <div class="form-group">
+                    <label for="last_name">APELLIDO</label>
+                    <input type="text" id="last_name" placeholder="Apellido" name="last_name" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">CORREO ELECTRÓNICO</label>
+                <input type="email" id="email" placeholder="Correo electrónico" name="email" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+            </div>
+            
+            <div class="form-group">
+                <label for="password">CONTRASEÑA</label>
+                <input type="password" id="password" placeholder="Contraseña" name="password" class="w-full rounded-md border p-2 dark:bg-zinc-800 dark:text-white" />
+                
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn-primary">
+                    GUARDAR CAMBIOS
+                </button>
+                <button type="button" class="btn-secondary" id="cancel-btn">
+                    CANCEL
+                </button>
+            </div>
+            
+            <div class="my-6 h-px bg-gradient-to-r from-transparent via-neutral-700 to-transparent"></div>
+        </form>
     </div>
 
     <script>
-        const form = document.querySelector('form');
-        const usuarioInput = document.getElementById('usuario');
-        const nombreInput = document.getElementById('nombre');
-        const apellidoInput = document.getElementById('apellido');
-        const correoInput = document.getElementById('correo');
-        const contrasenaInput = document.getElementById('contrasena');
-        const confirmarContrasenaInput = document.getElementById('confirmar_contrasena');
-
-        const usuarioError = document.getElementById('usuario-error');
-        const nombreError = document.getElementById('nombre-error');
-        const apellidoError = document.getElementById('apellido-error');
-        const correoError = document.getElementById('correo-error');
-        const contrasenaError = document.getElementById('contrasena-error');
-        const confirmarContrasenaError = document.getElementById('confirmar_contrasena-error');
-
-        function validateForm() {
-            let isValid = true;
-
-            if (!usuarioInput.value.trim()) {
-                usuarioError.textContent = 'Por favor, ingresa un nombre de usuario.';
-                isValid = false;
-            } else {
-                usuarioError.textContent = '';
+        // Función para mostrar la previsualización de la imagen seleccionada
+        document.getElementById('profile-photo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('profile-preview').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
             }
+        });
 
-            if (!nombreInput.value.trim()) {
-                nombreError.textContent = 'Por favor, ingresa tu nombre.';
-                isValid = false;
+        // Validación del nombre de usuario en tiempo real
+        const usernameInput = document.getElementById('username');
+        const usernameHint = document.getElementById('username-hint');
+        
+        usernameInput.addEventListener('input', function() {
+            const isValid = /^[a-zA-Z0-9@.+_-]+$/.test(this.value);
+            
+            if (this.value.length > 0 && !isValid) {
+                usernameHint.classList.add('error');
+                usernameHint.textContent = 'Solo se permiten letras, dígitos y @/./+/-/_';
             } else {
-                nombreError.textContent = '';
+                usernameHint.classList.remove('error');
+                usernameHint.textContent = '';
             }
+        });
 
-            if (!apellidoInput.value.trim()) {
-                apellidoError.textContent = 'Por favor, ingresa tu apellido.';
-                isValid = false;
-            } else {
-                apellidoError.textContent = '';
+        // Validación al enviar el formulario
+        document.getElementById('profile-form').addEventListener('submit', function(e) {
+            const username = usernameInput.value;
+            const isValid = /^[a-zA-Z0-9@.+_-]+$/.test(username);
+            
+            if (!isValid) {
+                e.preventDefault();
+                usernameHint.classList.add('error');
+                usernameHint.textContent = 'Caracteres no válidos en el nombre de usuario';
+                usernameInput.focus();
             }
+        });
 
-            if (!correoInput.value.trim()) {
-                correoError.textContent = 'Por favor, ingresa tu correo electrónico.';
-                isValid = false;
-            } else if (!isValidEmail(correoInput.value.trim())) {
-                correoError.textContent = 'Por favor, ingresa un correo electrónico válido.';
-                isValid = false;
-            } else {
-                correoError.textContent = '';
-            }
-
-            if (!contrasenaInput.value.trim()) {
-                contrasenaError.textContent = 'Por favor, ingresa una contraseña.';
-                isValid = false;
-            } else if (contrasenaInput.value.length < 8) {
-                contrasenaError.textContent = 'La contraseña debe tener al menos 8 caracteres.';
-                isValid = false;
-            } else {
-                contrasenaError.textContent = '';
-            }
-
-            if (!confirmarContrasenaInput.value.trim()) {
-                confirmarContrasenaError.textContent = 'Por favor, confirma tu contraseña.';
-                isValid = false;
-            } else if (confirmarContrasenaInput.value !== contrasenaInput.value) {
-                confirmarContrasenaError.textContent = 'Las contraseñas no coinciden.';
-                isValid = false;
-            } else {
-                confirmarContrasenaError.textContent = '';
-            }
-
-            return isValid;
-        }
-
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
-            if (validateForm()) {
-                form.submit();
+        // Botón cancelar
+        document.getElementById('cancel-btn').addEventListener('click', function() {
+            if (confirm('¿Estás seguro de que deseas cancelar los cambios?')) {
+                // Aquí iría la lógica para cancelar/volver atrás
+                console.log('Cambios cancelados');
             }
         });
     </script>
