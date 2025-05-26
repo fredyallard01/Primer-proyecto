@@ -219,9 +219,7 @@
               {% csrf_token %}
               <button type="submit" class="text-red-400 hover:text-red-300 transition-colors">Logout</button>
               {% if request.user.is_staff %}
-              <div class="text-right mb-4">
                 <a href="{% url 'blogapp:admin_dashboard' %}"class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300">Panel Administrativo</a>
-              </div>
             {% endif %}
             </form>
           </div>
