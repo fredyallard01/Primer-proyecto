@@ -285,7 +285,7 @@
     <div class="register-container">
         <h2>EDITAR PERFIL</h2>
 
-        <form id="profile-form" method="post" enctype="multipart/form-data">
+        <form id="profile-form" method="post" enctype="multipart/form-data"> <!--Se usa el método POST y se permite subir imágenes para la foto de perfil-->
             {% csrf_token %}
             
             <div class="profile-picture">
@@ -335,7 +335,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    document.getElementById('profile-preview').src = event.target.result;
+                    document.getElementById('profile-preview').src = event.target.result; <!--Vista previa de la foto de perfil-->
                 };
                 reader.readAsDataURL(file);
             }
@@ -346,7 +346,7 @@
         const usernameHint = document.getElementById('username-hint');
 
         usernameInput.addEventListener('input', function() {
-            const isValid = /^[a-zA-Z0-9@.+_-]+$/.test(this.value);
+            const isValid = /^[a-zA-Z0-9@.+_-]+$/.test(this.value); <!--Valida si el usuario no ha colocado caracteres no permitidos-->
 
             if (this.value.length > 0 && !isValid) {
                 usernameHint.classList.add('error');
