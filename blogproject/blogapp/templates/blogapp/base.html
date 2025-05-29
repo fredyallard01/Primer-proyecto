@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GamesHub - Blog de Videojuegos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="img/logo.png">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -128,11 +129,26 @@
         <div class="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:20px_20px]"></div>
     </div>
 
-    <nav class="bg-gamer-dark/80 backdrop-blur-md border-b-2 border-neon-blue/30 py-4 px-6 transition-all shadow-lg shadow-neon-blue/10">
+    <!-- NAVBAR CON LOGO AGRANDADO -->
+    <nav class="bg-gamer-dark/80 backdrop-blur-md border-b-2 border-neon-blue/30 py-3 px-6 transition-all shadow-lg shadow-neon-blue/10">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl font-gamer text-neon-blue tracking-wider transition-all hover:text-neon-pink hover:animate-glow">
-                Games<span class="text-neon-pink">Hub</span>
+            <a href="#" class="flex items-center gap-3 group">
+                <!-- LOGO MÁS GRANDE (60px) CON EFECTOS MEJORADOS -->
+                <div class="relative">
+                    <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-neon-blue/40 to-neon-purple/40 blur-md group-hover:opacity-100 opacity-80 transition-all duration-500 animate-pulse-slow"></div>
+                    <img 
+                        src="img/logo.png" 
+                        alt="GamesHub Logo"
+                        class="relative z-10 w-16 h-16 object-contain drop-shadow-[0_0_12px_rgba(0,240,255,0.8)] hover:rotate-6 transition-all duration-300"
+                        onerror="this.src='https://i.imgur.com/OHmQVjt.png'"
+                    >
+                </div>
+                <!-- TEXTO CON AJUSTE DE TAMAÑO -->
+                <span class="text-3xl font-gamer text-neon-blue tracking-wider group-hover:text-neon-pink transition-colors duration-300 animate-glow">
+                    Games<span class="text-neon-pink">Hub</span>
+                </span>
             </a>
+
             <div class="flex items-center space-x-4">
                 <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="gamer-btn flex items-center gap-2 px-4 py-2 rounded-md bg-gamer-light border border-neon-blue/50 text-neon-blue hover:border-neon-pink hover:text-neon-pink transition-all duration-300 shadow-lg">
                     <span id="theme-icon" class="transition-all duration-500">🌞</span>
@@ -145,12 +161,13 @@
                 <div class="flex items-center space-x-4">
                     <span class="text-neon-blue">Player: <span class="text-neon-pink">User</span></span>
                     <a href="#" class="text-neon-blue hover:text-neon-pink transition-colors">Editar Perfil</a>
-                    <button  onclick="logout()" class="text-red-400 hover:text-red-300 transition-colors">Logout</button>
+                    <button onclick="logout()" class="text-red-400 hover:text-red-300 transition-colors">Logout</button>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- RESTO DEL CONTENIDO -->
     <main class="flex-grow w-full">
         <div class="max-w-4xl mx-auto px-4 py-8">
             <div class="bg-gamer-light/80 backdrop-blur-sm border-2 border-neon-blue/20 rounded-lg shadow-lg shadow-neon-blue/10 pixel-corners p-6 transition-all duration-700 ease-in-out">
@@ -185,7 +202,6 @@
                         <a href="#" class="text-neon-blue hover:text-neon-pink">Register</a>
                     </div>
                 </div>
-            
             </div>
         </div>
     </main>
@@ -193,13 +209,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const prefersDark = localStorage.getItem('theme') === 'dark' ||
-                               (
-                                   !localStorage.getItem('theme') &&
-                                   window.matchMedia('(prefers-color-scheme: dark)').matches
-                               );
+                               (!localStorage.getItem('theme') &&
+                                window.matchMedia('(prefers-color-scheme: dark)').matches);
             const body = document.getElementById('body');
             const icon = document.getElementById('theme-icon');
-            const darkModeToggle = document.getElementById('dark-mode-toggle'); // Correct ID.
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
 
             if (prefersDark) {
                 body.classList.add('dark');
@@ -215,7 +229,6 @@
                 if (label) label.textContent = 'Modo Claro';
             }
 
-            // Asegúrate de que el evento click esté adjunto al botón correcto
             if (darkModeToggle) {
                 darkModeToggle.addEventListener('click', toggleDarkMode);
             }
@@ -250,26 +263,9 @@
         function logout() {
             alert('Logging out...');
         }
-        
-        // Efecto de tecleo para los títulos
-        document.querySelectorAll('.typewriter').forEach((element) => {
-            const text = element.textContent;
-            element.textContent = '';
-            let i = 0;
-            const typing = setInterval(() => {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(typing);
-                }
-            }, 100);
-        });
     </script>
 </body>
 </html>
-
-
 
 
 
