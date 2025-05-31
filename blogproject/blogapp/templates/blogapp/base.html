@@ -200,8 +200,20 @@
   <!-- Barra de navegación - estilos para ambos modos -->
   <nav class="dark:bg-gamer-dark/80 light:bg-white/80 backdrop-blur-md border-b-2 dark:border-neon-blue/30 light:border-light-accent/30 py-4 px-6 transition-all shadow-lg dark:shadow-neon-blue/10 light:shadow-light-accent/10">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <a href="{% url 'blogapp:blog_list' %}" class="text-2xl font-gamer tracking-wider transition-all hover:animate-glow dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600">
-        Games<span class="dark:text-neon-pink light:text-purple-600">Hub</span>
+      <a href="{% url 'blogapp:blog_list' %}" class="flex items-center gap-3 group">
+        <!-- LOGO AÑADIDO -->
+        <div class="relative">
+          <div class="absolute -inset-1 rounded-full bg-gradient-to-r dark:from-neon-blue/40 dark:to-neon-purple/40 light:from-light-accent/40 light:to-purple-500/40 blur-md group-hover:opacity-100 opacity-80 transition-all duration-500 animate-pulse-slow"></div>
+          <img 
+            src="img/logo.png" 
+            alt="GamesHub Logo"
+            class="relative z-10 w-16 h-16 object-contain dark:drop-shadow-[0_0_12px_rgba(0,240,255,0.8)] light:drop-shadow-[0_0_12px_rgba(59,130,246,0.8)] hover:rotate-6 transition-all duration-300"
+            onerror="this.src='https://i.imgur.com/OHmQVjt.png'"
+          >
+        </div>
+        <span class="text-3xl font-gamer tracking-wider transition-all hover:animate-glow dark:text-neon-blue dark:hover:text-neon-pink light:text-light-accent light:hover:text-purple-600">
+          Games<span class="dark:text-neon-pink light:text-purple-600">Hub</span>
+        </span>
       </a>
       <div class="flex items-center space-x-4">
         <button onclick="toggleDarkMode()" class="gamer-btn flex items-center gap-2 px-4 py-2 rounded-md border transition-all duration-300 shadow-lg dark:bg-gamer-light dark:border-neon-blue/50 dark:text-neon-blue dark:hover:border-neon-pink dark:hover:text-neon-pink light:bg-gray-100 light:border-light-accent/50 light:text-light-accent light:hover:border-purple-600 light:hover:text-purple-600">
