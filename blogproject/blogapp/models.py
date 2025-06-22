@@ -6,6 +6,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # MODELOS
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
 
 class Blog(models.Model): #Representa una entrada de blog
     GAMES_GENRES = [
