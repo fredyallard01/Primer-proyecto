@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles', #Para mostrar servingstaticfiles como imágenes, archivo CSS...
     'blogapp', #Esta es una nueva app, que se creo a partir de la carpeta llamada "blogapp"
     'widget_tweaks',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,21 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'blogproject.urls'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'blogapp/templates/blogapp')]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'blogapp/staticfiles')  # Carpeta donde se recopilarán los archivos estáticos finales
+
+COMPRESS_ROOT = STATIC_ROOT
+
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
+]
 
 TEMPLATES = [
     {
