@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-ukz72g)*267@$nvdk**+6#+a*nyzh_1t3o2=@wxtpga$cew)2^
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+DEBUG = False
 
 ALLOWED_HOSTS = ['RickWiss.pythonanywhere.com',"127.0.0.1"]
 
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'compressor',
     'debug_toolbar'
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
     'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
