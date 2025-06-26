@@ -14,6 +14,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
+from django.http import HttpResponse
+from django.core.cache import cache
+
+from django.http import HttpResponse
+from django.core.cache import cache
+
 
 
 class BlogListView(ListView):
@@ -183,3 +189,9 @@ def upload_image(request):
 reviews = Review.objects.select_related('blog', 'reviewer') \
     .prefetch_related('likes', 'blog__blogtag_set__tag')
 
+
+
+def test_redis_view(request):
+    cache.set("clave_de_web", "dato guardado desde la vista", timeout=30)
+    valor = cache.get("clave_de_web")
+    return HttpResponse(f"Valor desde Redis: {valor}")
