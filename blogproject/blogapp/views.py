@@ -175,3 +175,11 @@ def upload_image(request):
         image_url = default_storage.url(path)
         return JsonResponse({'url': image_url})
     return JsonResponse({'error': 'Upload failed'}, status=400)
+
+
+
+
+# Ejemplo de consulta optimizada en views.py
+reviews = Review.objects.select_related('blog', 'reviewer') \
+    .prefetch_related('likes', 'blog__blogtag_set__tag')
+
