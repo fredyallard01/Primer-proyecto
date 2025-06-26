@@ -18,15 +18,12 @@
             {{ field|add_class:"w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" }}
           {% endif %}
 
-          {% if field.errors %}
-            <p class="text-red-500 text-sm">{{ field.errors|striptags }}</p>
-          {% endif %}
-        </div>
       {% endfor %}
     </div>
     <button type="submit" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700 rounded transition-all duration-500 ease-in-out">Submit Review</button>
 
-    <!-- CKEditor 5 -->
+
+
     <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 
     <script>
@@ -113,6 +110,6 @@
         .catch(error => {
           console.error('Error initializing CKEditor:', error);
         });
-    </script>
+    </script>  
   </form>
 {% endblock %}
