@@ -13,6 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
+from django.http import HttpResponse
+from django.core.cache import cache
+
 
 
 class BlogListView(ListView): #Muestra una lista de blogs
@@ -117,3 +120,8 @@ def upload_image(request):
         image_url = default_storage.url(path)
         return JsonResponse({'url': image_url})
     return JsonResponse({'error': 'Upload failed'}, status=400)
+
+def test_redis_view(request):
+    cache.set("clave_de_web", "dato guardado desde la vista", timeout=30)
+    valor = cache.get("clave_de_web")
+    return HttpResponse(f"Valor desde Redis: {valor}")
