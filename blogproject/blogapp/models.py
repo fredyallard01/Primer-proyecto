@@ -64,3 +64,19 @@ class Comment(models.Model): #Representa un comentario en una reseña.
 
     def __str__(self):
         return f"Comment by {self.commenter.username}"
+    
+    # select_related y prefetch_related
+
+class Tag(models.Model):  # Representa una etiqueta que puede ser asociada a un blog.
+    name = models.CharField(max_length=50, unique=True)
+    def __str__(self):
+        return self.name
+
+class BlogTag(models.Model):  # Relación muchos a muchos entre Blog y Tag.
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('blog', 'tag')
+    def __str__(self):
+        return f"{self.blog.title} - {self.tag.name}"
+

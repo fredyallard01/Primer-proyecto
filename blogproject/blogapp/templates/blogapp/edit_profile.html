@@ -346,7 +346,7 @@
         const usernameHint = document.getElementById('username-hint');
 
         usernameInput.addEventListener('input', function() {
-            const isValid = /^[a-zA-Z0-9@.+_-]+$/.test(this.value); <!--Valida si el usuario no ha colocado caracteres no permitidos-->
+            const isValid = /^[a-zA-Z0-9@.+_-]+$/.test(this.value); 
 
             if (this.value.length > 0 && !isValid) {
                 usernameHint.classList.add('error');
