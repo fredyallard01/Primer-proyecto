@@ -21,8 +21,8 @@ urlpatterns = [
     path('register/',views.RegisterView.as_view(), name='register'),
     path('profile/edit',views.ProfileEditView.as_view(), name='edit_profile'),
     path('dashboard/', views.AdminDashboardView.as_view(), name='admin_dashboard'),
-
     path('upload/', views.upload_image, name='upload_image'),
+    path("prueba-redis/", test_redis_view)
 ]
 
 

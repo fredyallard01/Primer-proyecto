@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-ukz72g)*267@$nvdk**+6#+a*nyzh_1t3o2=@wxtpga$cew)2^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles', #Para mostrar servingstaticfiles como imágenes, archivo CSS...
     'blogapp', #Esta es una nueva app, que se creo a partir de la carpeta llamada "blogapp"
     'widget_tweaks',
+    'compressor',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -52,9 +54,29 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'blogproject.urls'
+
+STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'blogapp/templates/blogapp')]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'blogapp/staticfiles')  # Carpeta donde se recopilarán los archivos estáticos finales
+
+COMPRESS_ROOT = STATIC_ROOT
+
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",
+]
+
+INTERNAL_IPS = ['127.0.0.1',]
 
 TEMPLATES = [
     {
@@ -139,7 +161,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis-16708.c80.us-east-1-2.ec2.redns.redis-cloud.com:16708",  # DB número 1 de Redis
+        "LOCATION": "redis://127.0.0.1:6379/1",  # DB número 1 de Redis redis-16708.c80.us-east-1-2.ec2.redns.redis-cloud.com:16708
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

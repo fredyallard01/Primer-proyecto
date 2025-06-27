@@ -1,0 +1,9 @@
+function getCSRFToken(){const name='csrftoken';const cookies=document.cookie.split(';');for(let i=0;i<cookies.length;i++){const c=cookies[i].trim();if(c.startsWith(name+'=')){return decodeURIComponent(c.substring(name.length+1));}}
+return'';}
+class MyUploadAdapter{constructor(loader){this.loader=loader;}
+upload(){return this.loader.file.then(file=>{const data=new FormData();data.append('upload',file);return fetch('/upload/',{method:'POST',headers:{'X-CSRFToken':getCSRFToken()},body:data}).then(response=>{if(!response.ok){throw new Error('Upload failed');}
+return response.json();}).then(data=>({default:data.url}));});}
+abort(){}}
+function MyCustomUploadAdapterPlugin(editor){editor.plugins.get('FileRepository').createUploadAdapter=(loader)=>{return new MyUploadAdapter(loader);};}
+ClassicEditor.create(document.querySelector('#editor'),{extraPlugins:[MyCustomUploadAdapterPlugin],toolbar:['heading','|','bold','italic','underline','fontSize','fontFamily','|','link','blockQuote','imageUpload','insertTable','mediaEmbed','|','undo','redo'],}).then(editor=>{editor.editing.view.change(writer=>writer.setStyle('min-height','90vh',editor.editing.view.document.getRoot()));const editableElement=editor.ui.view.editable.element;const isDark=document.documentElement.classList.contains('dark');if(isDark){editor.editing.view.change(writer=>{writer.setStyle('background-color','#374151',editor.editing.view.document.getRoot());writer.setStyle('color','#D1D5DB',editor.editing.view.document.getRoot());});}
+editableElement.classList.add('bg-white','dark:bg-gray-700','text-gray-900','dark:text-gray-300','px-4','py-2','rounded-lg','border','border-gray-300','dark:border-gray-600','focus:outline-none','focus:ring-2','focus:ring-blue-500');}).catch(error=>{console.error('Error initializing CKEditor:',error);});;
